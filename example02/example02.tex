@@ -1,0 +1,572 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage[english]{babel}
+\usepackage{dblfloatfix}
+\usepackage[sort,nocompress]{cite}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\title{Economic model of ECOChain}
+\author{Nikolaos Antonatos antonatos.nik@gmail.com , \\
+Akis Chalkidis akis@ecoc.io}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=true,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4
+}
+
+
+\begin{document}
+\definecolor{bg}{RGB}{255,255,255}
+\pagecolor{bg}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Preface}
+\paragraph{}
+	When we are talking about blockchains we usually refer to technology around it. But a blockchain is much more than that. Any blockchain has or should have a sound economy. The economic value can be determined by its \emph{ecosystem}. By the term ecosystem we do not only mean the technology, which exists and supports the first layer (tools for developers, applications for the chain, autonomous decentralized applications etc.). We are also referring to anything and anyone that is evolved in it: investors, programmers, traders, owners of systems or applications with cross chain capability that support the ecosystem, exchanges, community, and actual users.
+\paragraph{}
+	In this paper we are going to analyze the factors that shape the economy of ECOChain. More precise, we are going to present the factors that drive the supply and demand of the coins and its real utility value. We are also going to explain the reward system for investors, analyze the risks they face. We are going to describe all the parts of ECOChain's ecosystem. We are also going to measure everything is related to economy. All this can help for someone to determine the real value of ECOChain.
+
+\section{Value of the Ecosystem}
+\paragraph{}
+In this section we are going to evaluate ECOChain from a macroeconomic point of view. Macroeconomy is the science that studies and tries to explain how an economy function. Macroeconomic theories and tools are invaluable here; without them it will be very difficult to spot or describe the critical factors and indicators that can help to the evaluation of the ecosystem. We start with monetary theory and continue using the Utility theory.
+
+\subsection{Macroeconomics}
+\subsubsection{Quantity money theory}
+\paragraph{}
+\emph{Quantity of money theory} states that the price level of services depends linearly to the money that circulates in the system. In short, the prices depend on the supply of money. The very well-known equation $MV=PY$ represents this theory.
+For classical economics, price level is not important; this is known as \emph{classical dichotomy}. The money is just the tool for the exchange of goods or services, which in blockchain systems are the transactions. So, according to classical dichotomy, the money supply and demand set the price level, which is not important for the system to function.
+\paragraph{}
+But things are not so simple. Here price refers to the services inside the system (actual transactions). But the real world is not only the blockchain system. Outside of the system there is an external rate, the exchange rate between fiat money and native blockchain money (ECOC). This rate is important for the people who are involved with ECOChain and they are actual parts of the ecosystem (users, investors, developers etc.). Consequently, the external rate (let's call it just "rate" from now on) is important. This rate and its stability also depend on the total supply and demand of the coin.
+\paragraph{}
+In the next sections we are going to see what the drivers of the money (coin) supply and demand are.
+
+\subsubsection{Money Supply}
+\paragraph{}
+For fiat money, the current supply is set by the Central Bank, which is the central authority that issues the currency. But for decentralized blockchains the issue of money comes from the protocol itself. ECOChain has a fixed creation of coins per time (block creation), and a total supply limit. After maximum supply is reached there is no more coin issuance. This means that the final money supply is stable, because ECOC cannot be destructed on protocol level. In practice, some coins are "lost" because some users may lose their private keys. We believe that this is not a common occasion, so we assume that the money supply never decreases.
+\paragraph{}
+In short, it is easy to compute the money supply at a given time. In the "Reward details" section we are going to give the exact math formula. For the time being we can say that the money supply will increase slowly (because of Themis hard fork, described later) until the limit.
+\paragraph{}
+We must explain here that there are three sizes of supply: M1, M2 and M3.
+What we are going to use for our analysis is M1, which is the current coins in circulation as explained above. But we also have M2, which contains deposited coins to central points. Those points usually are exchanges, but can also be applications, smart contracts or even scripts, where coins are temporary locked. M2 is always greater than M1. Finally, there is M3, which contains all M2 cases plus derivatives which are based on the native coin (ECOC). The derivatives work with leverage, so M3 can be much greater than M2. CeFi and Defi are key factors here for these sizes.
+
+\subsubsection{Money Demand}
+\paragraph{}
+We have seen what sets the money supply. But what does determine the money (coin) demand? Coin demand depends on how often the coins need to be used or stored. If investors believe in ECOChain they will buy ECOC coins and stake them. Also, the higher the actual transaction speed, the higher is the demand for gas. Gas is needed for transactions. But gas can be extracted only from ECOC. Traders increase demand because they must buy coins to deposit on exchange platforms. Users of the decentralized application increase demand; Developers who build them increase demand. DeFi increases demand on leverage, as it forces coins to be locked in smart contracts.
+\paragraph{}
+Let us recap. The usual factors that shape demand are:
+\begin{itemize}
+  \item Positive or negative view of investors (long term coin holders)
+  \item Demand from traders, who need to deposit ECOC coins to exchange platforms or smart contracts (short term holders)
+  \item Developers, who must spend gas to deploy smart contracts and store coins to have available gas for the functionality of smart contracts for their decentralized applications
+  \item Users, which need to call smart contract function (again, gas is needed)
+  \item Centralized applications (usually payment systems) that they use ECOC. Some quantity of coins must always circulate inside their system. 
+\end{itemize}
+\paragraph{}
+From the above it should be clear that the demand for coins (money demand) comes with the real use of the system. For this reason, a more detailed explanation and clarification of ECOChain's \emph{Utility} is needed.
+
+\subsubsection{Utility}
+\paragraph{}
+In \emph{neoclassic economics} the term \emph{Utility} is used to represent the satisfaction that users get from a product. Utility for an economic system, including blockchains, can model and measure the actual (not monetary) value of the system.
+\paragraph{}
+There are two types of use that bring utility for ECOChain: the first is the direct use of the native coin, ECOC. The second is the conversion of ECOC to gas, which is needed for transactions.
+\begin{itemize}
+  \item
+  If some business needs a payment system or want to use a decentralized payment system, then it can integrate ECOC and use it for payment. This is a direct way of using ECOC without the need of using the virtual machine (smart contracts). 
+  \item
+  The second utility for ECOC is its use as a gas. For all decentralized applications to function they must deploy and use smart contracts. Every time the state of a smart contract changes a small fee must be payed to the staker of the block that will include the transactions. It is obvious that the greater the ecosystem in size the more the demand for gas.
+\end{itemize}
+
+\subsection{ECOChain's value}
+\paragraph{}
+From the above it must be clear which factors set the value of ECOChain. Based on utility, which drives the demand as already mentioned at section 2.1.3 (Money Demand) the real value of the system can be guessed. 
+\paragraph{}
+There is a particularity for blockchains. According to utility theory the \emph{margin utility} for the user is being reduced every time he uses a product until it reaches zero. At this point there is no utility for the user, so he stops using it (at least for some period). And this phenomenon influences the aggregate demand of that product. Let us make it clear with an example. Someone is thirsty so he buys a small bottle of water and drinks it. Then he buys a second one and drinks it. The satisfaction (margin utility) of the consumption of the first bottle is much greater than the second because he is less thirsty now. He buys another one and he is not thirsty at all. So, he is not going to buy another bottle (at least until he is thirsty again). During the third bottle the product (water) reach for him a margin utility of zero. This fact is true for the most consumer products.
+\paragraph{}
+But there are products where margin utility increases with the usage of the product, or at least the margin utility increases for the other users of the product. How is this possible?
+\paragraph{}
+There is a phenomenon that happens on specific products that is called \emph{ Metcalfe's law} or else \emph{network effect}. Telecommunications, operating systems, software applications (for example online games), platforms and blockchains belong to this category. The greater the number of phone or players or developers etc. the greater the increase for the satisfaction for the end user (margin utility). For ECOChain (and all other blockchains) this is a fact; the presence of many developers, dApps, tools, investors and end users magnify the utility value of each end user. In other words, the greater the ecosystem the more value ECOChain can gain. In the last section we are going to see how ECOChain can expand its ecosystem.
+
+\section{Reward details}
+\subsection{About Proof of Stake}
+\paragraph{}
+Proof of Stake, or PoS for short, is a consensus algorithm that is based on the coins that everyone has. ECOChain consensus is PoS. Consensus is needed for the network to agree what is valid and what is not and to change the state in a valid way. We are not going to get into many technical details in this section. We are interesting only in the economic implications of PoS. How it influences the money supply, how incentivize people to invest in ECOChain and keep the network functioning (validate, broadcast data, form new blocks, execute the code of smart contracts).
+\paragraph{}
+The people who hold coins (ECOC) have the right to stake. Holders who stake are called \emph{stakers}. Stakers carry a risk because the coin has some price volatility. Stakers have also a small cost because they must run a full node to stake. For these reasons it is obvious that they must have some benefit. This reward comes in two forms: \emph{coin stake} and \emph{fees}. Both are given at each block to a staker (coin stake reward and transactions fees that the staker will include in the new block). The staker is chosen by the consensus algorithm uniformly at random but the probability is proportional to the staking amount (so we can say uniformly at random per coin).
+
+\subsection{Coin stake reward}
+\paragraph{}
+There was an initial Proof of Work phase of $10,000$ blocks which produced 200 million coins. These coins (and 6 million more) are going to be burned soon after Themis hard fork (which will take place at block height $870,000$). But more on this later, in the next section. 
+\paragraph{}
+PoS coin stake reward starts at block $10,001$ and is fixed at $50$ ECOC per block. This will be kept fixed until Themis hard fork and then change to just $5$ ECOC per block. There will be five epochs which will reduce the coin stake reward by 1 ECOC each until it reaches zero. The duration of each epoch is one million blocks (approximately on year) except the last one which will be extended until total supply reaches the cap. Cap limit is $300,000,000$ ECOC. Consequently, the last PoS block will be at height $47,870,000$. The expected duration is about 47 years from now.
+\paragraph{}
+The following clarifies more the coin base reward:
+\begin{itemize}
+\item Block height $1-10,000 : 20,000$ ECOC
+\item Block height $10,001-870,000 : 50$ ECOC
+\item Block height $870,001-1,870,000: 5$ ECOC
+\item Block height $1,870,001-2,870,000: 4$ ECOC
+\item Block height $2,870,001-3,870,000: 3$ ECOC
+\item Block height $3,870,001-4,870,000: 2$ ECOC
+\item Block height $4,870,001-47,870,000: 1$ ECOC
+\item Block height $47,870,001- \infty$ : no reward
+\end{itemize}
+ 
+\subsection{Fee rewards}
+\paragraph{}
+Fee reward is the ECOC that the staker gains as for each transaction he includes inside the new block. If the staker is aware of a valid transaction and the block is not full, the transaction can be included in the block. So, there are three condition for the staker to be able to include transactions and get the fee:
+\begin{itemize}
+\item The staker has "won" the block
+\item The staker is aware of these transactions, that is, they exist in his memory pool
+\item The transactions pass all validity tests
+\end{itemize}
+\paragraph{}
+We are going to compute the minimum fee reward for the staker in case that the block is full. The block size limit is 4MB and the minimum fee is set by the protocol to $0.004$ ECOC. Consequently,
+$$ totalfees_{min}=block size * fee_{min} / size = \frac{4*10^6 * 0.04}{10^3}=16 \quad ECOC$$
+Of course, this is the minimum for a full block. Some transaction can contain higher fees than the minimum if the sender wants to be sure that the transaction will be included in the next block.
+
+\paragraph{}
+We must clarify that the fee is not "printed" by the protocol, it is just transferred from an existing coin owner (the one that initiates the transaction). So, the fees do not change the money supply but the demand. On the contrary, the coin stake reward increases the money supply.
+
+\section{Econometry}
+\subsection{Transaction cost analysis}
+\paragraph{}
+How much a transaction really cost? To answer this, we must first define what a transaction is and on which factors it depends. Simply put, a transaction is an action from a user that changes the state of the blockchain. That includes both the base ledger and the VM (virtual machine). To paraphrase it a bit, a transaction is "writing" on the blockchain. On the contrary, reading information from blockchain is free (because ECOChain is permission less).
+\paragraph{}
+To clarify more, let's give some examples. Reading a balance of an ECOChain public address is free. Additionally, calling a smart contract function which does not alter the state of the smart contract's storage (or other's smart contract storage) is also free. But sending ECOC from a public address to another is not free. The balances will change , so the state of the blockchain changes. This action is a transaction and a small fee must be paid to the staker of the block that will include it. Same goes for calling a smart contract function that changes the storage, or when deploying a smart contract. As a sidenote, there is an exception on this rule. When the state changes directly by the protocol no fees are charged. This occasion occurs at coin stake transactions.
+\paragraph{}
+Now let us answer the question of how much. What we can answer how much the \emph{minimum fee} is. The fee depends on transaction size. The reason for this is simple. First, the information must be stored on blockchain, which means that it will be replicated many times (on all nodes), and in theory will stay forever. Second, if fee does not depend on the size then an attacker can pay the fixed price fee and create a large transaction to cover the whole block, "polluting" that way the blockchain. Consequently, there are two basic reasons that the fee depends on transaction size: for economic and security reasons.
+\paragraph{}
+We have already seen that the minimum transaction cost is $C_{b}=C_{min}/Kbyte=0.004$ ECOC per Kb. We are going to proceed with cost analysis. The cost depends, as we have already seen, on the transaction size.  The transaction size depends on the number of the UTXOs that are going to be spent (\emph{vins}) and the new UTXO  that are going to be created (\emph{vouts}). Based on this fact we are going to analyze the minimum cost that occurs in most common transactions.
+\paragraph{}
+We consider 4 transactions that occur commonly:
+\begin{itemize}
+\item Common transaction (send ECOC to an address)
+The most common transaction is a user who sends coins to a public address. Usually this includes one(1) vin and two(2) vouts. The reason for this is that value of the unspent UTXO (vin) is usually more than the amount the users wants to transfer, so he must get back the change of the transaction. The changes, by default, goes back to the owner but to a different (not the original) public address of his wallet. So, 2 vouts are needed, one to the destination address and another one to return to the sender as change. Considering the above the transaction size is $225$ bytes. The transaction cost is
+$$C_{minimum} = C_{b}*S=0.04*\frac{225}{1000}=0.0009 ECOC$$
+\item Send ECOC to address (General case)
+Of course, the above is not always the case; a transaction may need to have more vins. This depends on the current state of sender's wallet. And he may decide to send to many persons(addresses). Let $v_{i}$ be the number of vins and  $v_{o}$ the number of vouts. For each additional vout the size will be 34 bytes more. This is because of the size address (33bytes) and the opcode (1byte). And for each additional vin the extra size will be around $150$ bytes. It is lengthy because it must be digitally signed to be able to be spent. $150$ is not very accurate, just an average, because it depends on the fact of how many different addresses sign the UTXOs. $150$ bytes is a good approximation. The script also contains some opcodes ,a length of $12$ bytes. So, an approximation of the cost for a transaction of many vins and vouts is:
+$$C_{min} \approx (C_{base}+vins*\bar{C_{vin}}+vouts*C_{vout})*C_{b}=$$ 
+$$=\frac{0.004(12+150vins+34vouts)}{10^3}$$
+
+For example, for 3 vins and 2 vouts the expected cost should be around
+$$C_{min} \approx \frac{0.004(12+150vins+34vouts)}{10^3} $$
+$$C_{min} \approx \frac{0.004(12+150*3+34*2)}{10^3} =\frac{0.004*530}{1000}=0.00212 ECOC$$
+
+\item Smart contract deployment:
+The fee for deploying a smart contract varies according to the total code. The actual cost is usually not important because it is deployed only once and smart contact's binary code is not very large. An analysis is pointless about cost. It must be noted, however, that developers try to optimize the smart contract not to decrease the deploying cost (which is low and done only once) but to optimize for low gas consumption when users call the smart contract functions.
+\item Execute smart contract function (send to contract):
+Reading smart contracts is feeless. On the other hand, calling functions that alter the state of the smart contract imposes a fee. The fee depends on two factors, the first is the storage size increase of the smart contract. The second is the execution fee (computation fee). Each opcode of the virtual machine has a specific amount of gas. Here again the cost varies much. It depends on function code, input arguments and final increase of the storage in the smart contract. Experienced dApp developers can optimize the code to make able the functions to execute with low consumption.
+
+\paragraph{}
+For all the above, the real cost depends on the exchange rate between USD and ECOC. If $e$ is the current exchange rate, then the real transaction cost is obviously $C_{usd}=e*C$
+
+\end{itemize}
+
+
+\subsection{Burning of Initial (pre-mined) coins}
+\paragraph{}
+The pre-mined (Proof of Work) phase produced $200$ million ECOC. The new cap is only $300$ million coins, which will be reached after a long time (around $47$ years). The original market cap was set to 2 billion coins but now this is not the case. The fact that pre-mined coins existing, brings unbalance, unfairness, and threatens price stability. Furthermore, it undermines decentralization because one entity (ECOChain founders) hold so much staking power.
+These $200$ million were never intended to be sold in the market or even used as spending fees on the virtual machine. The purpose was purely technical and to strengthen security. The initial pre-mined coins injected a starting entropy in the system. They also secured the chain of $51\%$ attacks from third parties in the initial state. These reasons have been elapsed today, so these coins have no basis for existence. Consequently, very soon after the hard fork the $200$ (plus 6 million more)  million must be locked forever. This has the following benefits:
+\begin{itemize}
+\item It brings back staking balance because the coins cannot be used by anyone. So, the actual cap (the final circulation) will be $94$ millions only. The staking power will be in many hands again, as it is proper for decentralization
+\item It cultivates the feeling of fairness between the community and users
+\item It brings price stability and removes the fear of inflation; the destroyed coins can't be used; they can't be sold. They are out of circulation forever.
+\item The new reward release speed will be on par with the current circulation. This will make the price depend on real demand, the real economic value that stems from fundamentals(as explained at section 2.2 above).
+\item Scarcity will help the price to rise slowly. This will attract more investors and funding in the long run.
+\item Full decentralization is achieved because even the founders will not have more staking power than the others.
+\end{itemize}
+
+Locking Forever the coins are easy using the VM. We create smart comtracts that contain 
+only one fallback payable function and nothing more. Coins can go in but there is no way to go out as there is no function for that. Below we provide the source code:
+
+\input{example02-solidity-highlighting.tex}
+
+\begin{lstlisting}[language=Solidity]
+pragma solidity 0.4.26;
+
+/* Smart contract to lock ECOC forever 
+ * there is a payable fallback function only
+ * don't send ECOC here, you will loose it forever
+ */
+ 
+contract lockForever {
+    function () external payable {
+        /* do nothing ...*/
+    }
+
+}
+\end{lstlisting}
+
+\paragraph{}
+The stakeholders who decided to destroy their coins can deploy a smart contract using the above code and then just send the coins to the contract addresses.
+\paragraph{}
+The above source code, details of how to check the validity and the smart contract deploying meta data can be found at github: \url{https://github.com/ECO-chain/ECOC-coinburning}
+
+\subsection{Circulation supply}
+The total money supply is set by the protocol. After Themis hard fork the total supply limit, also known as "cap", will be $300$ million coins. But the founders of ECOChain decided to destroy the pre-mined coins they own. $206$ million coins are going to be locked forever in a smart contract. This will bring the actual cap to $94$ million. But, the limit will be reached in around 47 years from now (2020). So, the actual circulation supply today is $37$ million coins and inflate slowly over the years.
+\paragraph{}
+Additionally, to $206$ million another $9$ million coins are going to be locked to smart contract. These are not considered as destroyed because a different type of smart contract will temporarily lock them for 10 months. At the end of each month $10\%$ of the total amount can be withdrawn. From the $9$ million above $6$ millions are dedicated for the explanation of the ecosystem (mostly it will be given to dApp creators as a subsidy). The rest $3$ million belong to \emph{ECOChain Foundation}. Their purpose is to promote ECOChain and help it reach its goals. 
+\paragraph{}
+Just for clarification, the extra $15$ millions (206+9-205) stem from the staking of the pre-mined $200$ million coins. And the actual circulation supply, as of today, September 2020 is around $28$ million coins. From now on no one has enough staking power to attack the chain. Finally, ECOChain has reached true decentralization.
+ 
+\subsection{Staking power (weight) analysis}
+\paragraph{}
+In this section we are going to explain how the coin stake reward is given. ECOChain use pure PoS algorithm to reach consensus. Only users that run a full node and hold coins can "win" the next block. This process is called \emph{staking}. The probability for each staker to mint the next block is proportional to the coins that he is staking. The probability is given uniformly at random by
+$$P_{m} = \frac{C_{s}}{N_{w}}$$
+where $C_{s}$ are the total coins of the staker and $N_{w}$ the total coins of the whole network that are staking at the current block (all coins that are staking). This is also called \emph{Network weight}.
+\paragraph{}
+Let us see a simple example. If the staker has $5,000$ ECOC and the total voins staking (including his own coins) are $10,000,000$ then the probability for him to mint the next block and get the coin stake reward is 
+$$P_{m} = \frac{C_{s}}{N_{w}}=\frac{5000}{10000000}=\frac{1}{2000}=0.05\%$$
+If we suppose that the network weigh $N_{w}$ does not vary much over time and he keeps staking, then his expected time to mint is every $2,000$ blocks on average. This is around 18 hours, as the average block creation time is 32 seconds. ECOChain wallet has option for the user to check the current network weight and his own weight any time. It also includes calculation to display the average time for winning the next block.
+\paragraph{}
+In practice Network weight may vary because staking is not obligatory. Coin holders can disconnect from the network. Or maybe a server can disfunction and stop staking. It is not uncommon for coin holders of small amounts to stake from their personal computers or laptops when they work and stop the staking operation when they are away (going out, going to sleep etc). Network weight can vary during time. Consequently, a staker can have higher or lower probability of minting blocks because probability depends not only on his amount of coins but on the others amount that are connected to the network.
+
+\subsection{Staker's risk analysis}
+We are going to make a basic analysis on the risk of a long-term holder must carry. Stakers are long term holders. This must be obvious because for someone to stake he must hold ECOC coins. Since ECOChain's consensus is PoS, the staker has a negligible running cost for staking (no energy consumption takes place).
+\paragraph{}
+\emph{Risk} in economics is defined as the variation around the expected value. We are going to compute the risk using historical data from MXC exchange, because this exchange has sufficient volume. The \emph{Value at Risk} (VaR) is going to be estimated using the \emph{Empirical Rule}.
+\paragraph{}
+The historic price records against USDT were taken from CoinMarketCap website (\url{https://coinmarketcap.com/currencies/ECOChain}) from April, 20 (MXC join date) until September,15.
+\paragraph{}
+Empirical rule is based on \emph{Normal Distribution}. First, we need to compute the mean (average) and deviation (sigma):
+$${\displaystyle E={\frac {1}{n}}\sum _{i=1}^{n}pr_{i}={\frac {pr_{1}+pr_{2}+\cdots +pr_{n}}{n}}}$$ 
+$$\sigma=\sqrt{\frac{1}{n}\sum_{i=1}^{n}(pr_{i}-E)^2}$$
+where $pr_{1...n}$ are the historical close prices.
+\paragraph{}
+From the history record we computed for ECOC price that
+$$E=2.2975838926175 , \sigma=1.0173479478472$$
+Based on Empirical Rule we are going to define three levels of certainty:
+\begin{itemize}
+\item[Probable:]
+Probable is the range of one deviation,$1\sigma$, and it has a probability of $68.27\%$ to happen:
+$$P(E-1\sigma \leq X \leq E+1\sigma) \approx 0.6827 $$
+Consequently, the price range $X$ is $P=[E-\sigma,E+\sigma]=[2.2975838926175
+-1.0173479478472,2.2975838926175+1.0173479478472]=[1.28,3.14]$USDT with probability $68.27\%$
+\item[Much probable:]
+Much probable is the range of two deviations,$2\sigma$ :
+$$P(E-2\sigma \leq X \leq E+2\sigma) \approx 0.9545 $$
+$X$ is $P=[E-2\sigma,E+2\sigma]=[2.2975838926175
+-2*1.0173479478472,2.2975838926175+2*1.0173479478472]=[0.26,4.33]$USDT with probability $95.45\%$
+\item[Certain:]
+Certainty  the range of three deviations,$3\sigma$ :
+$$P(E-3\sigma \leq X \leq E+3\sigma) \approx 0.9973 $$
+$X$ is $P=[E-3\sigma,E+3\sigma]=[2.2975838926175
+-3*1.0173479478472,2.2975838926175+3*1.0173479478472]=[0.00,5.35]$USDT with probability $99.73\%$
+\end{itemize}
+\paragraph{}
+\begin{table}[]
+\begin{tabular}{lll}
+\emph{Level}  & \emph{Price range}      & \emph{Probability(\%)} \\
+Probable      & {[}1.28, 3.14{]} & 68.27           \\
+Most Probable & {[}0.26, 4.33{]} & 95.45           \\
+Certain       & {[}0.00, 5.35{]} & 99.73          
+\end{tabular}
+\end{table}
+
+
+\section{ECOChain's Ecosystem}
+Blockchain is a platform. The value of any blockchain does not depend only on the platform itself but on all things that are around it and support it. By ecosystem we mean any tools (for example SDKs), applications, wallets, payment systems etc. But also Decentralized  applications (dApps) who run on the blockchain are very important. They enrich it, but most importantly they attract new users. Because of \emph{Metcalfe's law} the utility (usability) of the system increases quadratically.
+\paragraph{}
+ECOChain can gain great value only by building many useful dApps. The advantages ECOChain has are high transaction speed, developer's friendly language and tools, but most importantly, very low transaction cost. Later we are going to explain how much important the transaction fees are for the survivability of dApps.
+
+\subsection{Developers Motivation}
+Software houses and independent developers must have a motivation to start developing on ECOChain. In our opinion, the crucial factors for them to decide when choosing a platform are:
+\begin{itemize}
+\item Development friendliness: 
+Existing tools (languages, compilers, debuggers, SDK's, IDE plugins, monitoring tools etc.) are considered when project management is going to decide about the platform. The most important is probably the language. Because of today's Ethereum numerous existing applications most blockchain developers are familiar with solidity. One of the reasons that ECOChain adopted the EVM is this. Human resources are a constant problem for software companies. Choosing the most known language with the biggest community (tutorials, forums, tools etc.) relieves somewhat the pain for HR management as they have more opportunities and options for hiring.
+\item Existing ecosystem(mostly existing users):
+Ethereum has a clear advantage over all other blockchains because as a first mover it attracted the most developers and users. ECOChain's strategy is to bridge its platform with Ethereum. This is going to be done in a completely decentralized way. \emph{Cross-chaining} will be effortless for common dApp development. In other words the developers should be able to use tools that will be able to write the smart contracts once and deploy them on both blockchains without having to make any modifications. This is possible because, among others, the virtual machine is the same. dApps can also provide a unified UI (UUI), making user experience agnostic to the underline platform. dApp architects can benefit that way, moving most transactions on ECOChain platform, on which they can save largely on operational (transaction) costs. This is true not only for new but also for existing applications. They can increase their chance to survive, being relieved from the high transactions costs.
+\item Initial and Operational costs: 
+Deploying smart contracts on blockchain is costly on some blockchain platforms, but on most of them the cost is low. On ECOChain the cost is negligible. Because smart contract deployment is an onetime cost we can assume that this cost is not important for decision makers. What is important is the transaction cost. These costs are imposed on every transaction and can threaten the survivability of any decentralized application. Ethereum platform has this problem, which proved fatal for most of its dApps. The reasons for the very high cost are two. First, Ethereum (so far) uses PoW as a consensus. Second, because of the scalability problem, which is a problem for all public chains, there is congestion which rise the prices (and very often the cost is unpredictable). Blockchains with less dApps and users do not face this problem. To put it simply, public blockchains face \emph{Diseconomies of scale}. ECOChain can take advantage of this fact to attract new dApps and grow its ecosystem. Transaction cost advantage is a strong weapon when competing for market share because it is a high percentage of the total operational cost of decentralized applications.
+\end{itemize}
+
+\subsubsection{New Apps starting as decentralized}
+\paragraph{}
+New dApps have much common points with conventional (non-blockchain) applications. They have all the pros and cons of a startup application. But they also differ in many ways. Decentralized applications are much harder to be designed and secured. They also bear higher operational costs because they do not use a traditional database as a backend; they use the blockchain for their operations and storage. Their strong point is that they build a trustless system; users do not need to trust them because blockchain is there, immutable, and transparent. Smart contracts can be read by anyone and is guaranteed to be executed as programmed. For crucial operations or systems this can be a big plus because the potential users know that the application owner cannot cheat on them, even if he intends to do so. This can also help unknown startup companies (new brand) to compete with already establish or big size companies who already have a strong brand. In section \&6 (Use cases) we are going to see how important this is for companies who start without having an established brand.
+
+\subsubsection{Add value of decentralizing existing Apps}
+Companies may also decide to transform (partially most often) a traditional application to a decentralized one. What is their motivation ? They can benefit in many ways. We are going to mention the most common ones:
+\begin{itemize}
+\item Using it as a proof of concept. For critical data that company wants to convince their users they will not alter them later (need for immutability) they can hash the data and save the hashes on the blockchain. Then they keep the data off-chain. Cost is very low, and benefit is great
+\item For bypassing local regulations
+\item For easing cross border transactions
+\item To compete more easily with strong brands
+\item To automate processes that third parties are involved (track third party activities and be tracked to convince third parties for its data integrity)
+\item To get financial support if they cannot get it from traditional finance (are unable to get a loan from bank or sell bonds etc)
+\item If there is a need to record its own crucial activities; this is a rare occasion, when high management suspects that something is wrong in the company infrastructure and wants to protect itself of corruption or a catastrophic mistake.
+\item Do it only for marketing reasons; this is true sometimes if the company is in high tech sector or wants to appear that he always uses technology edge methods and products.
+\end{itemize}
+So, there are many reasons that a company may want to use the blockchain for its existing applications. In almost all cases they are going to use the blockchain partly, making a hybrid app. This is usually good, as they can balance between centralization and decentralization, getting the best parts from the two.
+
+\subsubsection{Subsidy program}
+Good projects (dApps or tools or even research) built on top of ECOChain should be rewarded. The reward has three purposes:
+\begin{itemize}
+\item to attract new development teams / software companies: Attracting teams will help the ecosystem to grow faster.
+\item for fairness reasons: anything that expands the ecosystem helps the value of ECOChain to grow. So, part of this value must go to the developers. We already announced that we are going to release rewards in form of coins to developers and companies for software development on ECOChain.
+\item for transparent distribution of coins, which leads to decentralization.
+\end{itemize}
+The project will be evaluated from us when starting.  We are going to compute a base value based on the following criteria:
+\begin{itemize}
+\item \emph{Innovation}: How common or innovative is the project ?
+\item \emph{Project size}: How large is the project; this can be measured by lines of code (LOC)  or man-hours or some other metric.
+\item \emph{Visibility of the company or project}: Has the team or company high reputation ?  If yes, then the chain’s visibility will also increase.
+\item \emph{Formal verification}: We believe that security is everything. If the smart contracts have formal verification or at least they are manually audited from a third party, this deserves a higher base reward.
+\end{itemize}
+
+On top of base prices, we can give bonuses as a percentage (\%). 
+Bonuses can be given in the following occasions:
+\begin{itemize}
+\item \emph{Open source}: We strongly encourage open source. Open source code can be trusted and adopted much easier. Also, bugs can be found and fixed.
+\item \emph{Smart contracts are formally verified or audited}: This is self-explained.  High level of security should be rewarded.
+\item \emph{Projects finishes on time}: It is good for the dApp team to have an extra reason to finish the project on time.
+\item \emph{Project is unique}: Uniqueness of the project can bring users and investors to ecosystem.
+\item \emph{Very well documented – quality white paper(s)}: A good documentation can help the users or other teams to use or reuse the dApp or research about the project.
+\item \emph{Special Bonuses}: In case that the project is not a dApp but a tool or research on a subject, special bonuses can apply. This kind of bonus varies from project to project.
+\end{itemize}
+Total reward cannot be given beforehand of course. Reward will be released based on the following milestones:
+\begin{itemize}
+\item \emph{Initial phase}: Project is evaluated, the base price is computed, and bonuses are added. There should be a detailed plan for the project. On approval 5\% of total will be released.
+\item \emph{Milestones 1-4}: The plan should break down 4 milestones (or more, if desired). 15\% will be released when a milestone is reached. Before the release audit of code will be done by us.
+\item \emph{Successful completion}: When the project completes successfully the final 35\% reward will be released. If the completion is on time an extra bonus will be given.
+\end{itemize}
+Of course, the above can vary from project to project and special agreements can be made with anyone that works for our ecosystem.
+
+\subsubsection{Other benefits}
+Whoever decides to build on ECOChain will receive not only financial benefits, as described above, but also other forms of them. We are willing to provide free tech support. Additionally, we can promote their products using our channels (social media, web etc.). We believe they are our partners and mutual benefit should exist.
+
+\subsection{Investors}
+As investors we consider any entity that is financially involved in ECOCchain in any way. He can be a short-term or long-term investor. Long term investors are those that have invested money and hold their position for more than a year. Intraday traders and arbitragers do not consider as investors.
+Most common type of investors are entities that hold ECOC coins. Holders carry a financial risk. Their motivation is to keep coins for staking and hope in capital profit because they believe that ECOChain's value will grow, which will bring an increase in ECOC price. But as investors we also considered the software developers and companies. They are spending time and money to create applications and tools. Either centralized or decentralized, these applications make the ecosystem to grow and evolve. Even independent developers who spend only time are investors under this definition.
+\paragraph{}
+It is obvious that any kind of investor is beneficial for ECOChain. ECOChain's interests and theirs are in par. If investors get disappointed then they will leave, which will impose damage to the platform. For this reason, it is crucial to keep them satisfied.
+
+\subsubsection{Short term investors}
+Sort term investors do not get a long period bet on ECOChain. Maybe their general strategy is such that they do not keep a position for long for any asset; or maybe they do not have enough trust. ECOChain wants to build trust for all type of investors and stakeholders. Thatis why the team is consistent and delivers what was promised on time. ECOChain is clear to its announcements and future plans. This is helpful because uncertainty is reduced for investors.
+
+\subsubsection{Long term investors}
+Long term investors have a belief on ECOChain and its abilities and goals. Because they risk more they also expect more. The risk they carry has been already analyzed at section \&4.5 
+\paragraph{}
+This category also includes the most dApp creators. For this reason, ECOChain must support them more. We have already presented the subsidy program for new dApps. We are also willing to provide technical support for free.
+ 
+\section{Use cases - Decentralized applications}
+What are the use cases for ECOChain? ECOChain can be used as a software platform for almost anything. Because of decentralization, its ideal use should be payment systems and Decentralized applications. On this chapter we are going to focus on decentralized applications (dApps), because this is strong point of ECOChain. ECOChain provides competitive advantage because of its low transaction cost.
+\paragraph{}
+First, we are going to see what kind of financial apps can run on a public blockhain. Then we are going to present some uses cases for non-financial dApps.
+
+\subsection{Centralized finance (CeFi)}
+Cefi as a term that means \emph{Centralized Finance}. That does not mean that it does not use the blockchain and that it functions like traditional finance. Not at all. CeFi as a term appeared after the creation of the term Defi. The term wants to stress out that while in DeFi everything is decentralized, in CeFi applications there are centralization points. Cefi also uses smart contracts and crypto assets. The fact that there are centralized points is not always a bad thing. There is a trade-off between centralization and decentralization. Depending of the needs of the application, centralization points may be introduced. The reasons for this are the following:
+\begin{itemize}
+\item \emph{Speed}: Data retrieving, data feeding to smart contracts and data delivering to users directly are much faster. Speed does not only deliver better user experience, but it also is a necessity in many occasions.
+\item \emph{Cost}: Costs, especially transaction costs can be brought next to zero. This is impossible when architecture is based on full decentralization
+\item \emph{Regulations}: Companies want to stay legal; if regulations are imposed, companies should comply to current state laws. This may be impossible in DeFi for some countries (for example, KYC is required)
+\item \emph{User support}: User support is non-existent in DeFi. This requires the users to be very tech savvy. CeFi is much more user friendly and direct support can be provided by the creators of the app. Usually the real ID of the user can be proved, which can be useful in catastrophic events.
+\item \emph{Implementation}: While in theory most thing are possible, decentralized solutions are more difficult to be carried out. That means that the developing cost and time can be less in Cefi than Defi. There are exceptions, depending on the use case, but the most common situation is this.
+\end{itemize}
+Which use cases belong to CeFi? The most common case is centralized exchanges. And when someone uses this term it usual means an exchange. But centralized finance is much more than this. Any application that uses smart contracts and targets finance in any way belongs to CeFi if some part of the App is heavily centralized. Very often the App needs an Oracle to function. The reason for this is that the virtual machine does not have access to real world, so data must be injected from outside. Another common case is \emph{asymetric power}; smart contracts authorize the owner or specific entities (specific public addresses) to change fees, rates, and any other parameters of the system.
+\paragraph{}
+We can categorize the following as use case under CeFi:
+\begin{itemize}
+\item Centralized exchanges.
+\item Centralized stable coins.
+\item \textbf{ICO} and \textbf{IEO} via smart contracts (fiat to crypto and distribution of assets).
+\item \textbf{OTC} (over the counter) fiat to crypto and crypto to fiat using escrow service via smart contracts. There is a central authority which can approve or revert the crypto assets transfer in a case of dispute.
+\item \textbf{Any} app which uses an oracle to feed critical data (common case is exchange rates and event results) to smart contracts. This category is actually very large, increasing the total size of CeFi applications considerably.
+\item Any app that uses \textbf{PKI} in its architecture.
+\end{itemize}
+While Cefi has centralization points it heavily uses smart contracts. A public blockchain is necessary for them to function. ECOChain is ideal for CeFi because it is a public blockchain with low fees and high TpS.
+
+\subsection{Decentralized finance (DeFi)}
+What is DeFi? DeFi, in short, tries to achieve what CeFi does without any centralized logic in the application. Defi dApps are completely decentralized, so they are trustless systems. This is its strong point against CeFi. Other advantage are more transparency, more anonymity for the users (can exist without KYC), no need for third parties (non-custodial).
+DeFi dApps have different types and architectures. The most common types are:
+\begin{itemize}
+\item \emph{Atomic swaps}\\
+Atomic swaps are exchanges of digital assets based on the same blockchain or even on different chains without a third party. If the assets are on different chains, then a cross-chain solution is needed. ECOChain does active research on this field. Cross-chain atomic swaps can be carried out securely.
+\item \emph{DEX}\\
+A decentralized exchange implementation (DEX) is possible. Usually it is a combination of atomic swaps. Smart contracts can contain rules about fees or other details for smooth operation of the DEX. There is no backend or databases of course. The users digitally sign the orders, asset transfers etc. with their private key directly using a frontend client.
+\item \emph{Derivatives}\\
+While normal DEX transactions correspond to spot trading, smart contracts can set conditions for trading in future prices, or options depending on price deviation etc. Consequently, derivatives are possible with smart contracts. An Oracle system is necessary to get exchange rates from outside.
+\item \emph{Pool staking}\\
+Many assets, either native coins or tokens, can be staked. Some can be staked unconditionally and others under certain conditions (for example require a minimum amount or other conditions). Centralized pools exist for staking. Using smart contracts, the staking for tokens can take place in a completely decentralized way and the dividends can be given back to owners whenever they request it. Of course, fees and any other rules and logic can be encoded inside smart contracts.
+\item \emph{Decentralized stable coins}\\
+Stablecoins are very useful. Decentralized coins are difficult to be created and operate successfully but they already exist. The smart contracts motivate the users to buy or sell other tokens connected to stable coin. That way whenever there is deviation from the target price arbitrage takes place from the users, driving back the stable coin's exchange rate to the desired price.
+\item \emph{Lending and borrowing}\\
+Some coin or token holders want to invest in DeFi or CeFi without being forced to liquidate their existing assets. There are dApps that allow users to lend their assets and other users get and use them however they like. The borrowers of course must first lock their own assets in smart contracts. The value of locking assets, acting as a pawn, must be always more than the borrowed assets. Lenders can earn interest (usually per block). The borrowers always face the risk of automatic liquidation if the value of their locked assets falls below the value of the assets that they borrowed.
+\item \emph{Liquidity providing and yield farming}\\
+A serious problem that most DEXs and other DeFi dApps are facing is low liquidity. Because of the low liquidity the DEXs in the past had been practically left without users and died. Recently a new method was found to provide liquidity. Asset owners can deposit assets (at least a pair) and they get reward for this from the dApp in tokens. This kind of special reward is called \emph{Yield farming}. It does not come without a risk though. The provider must keep a ratio of the assets depending on their exchange rate. This ratio is not fixed but depends on formulas. The whole system is based is AMM (Automated Market Makers). We are going to describe them in more detail soon.
+\end{itemize}
+
+Most dApps of the above types are composed from the following:
+\begin{itemize}
+\item \emph{Smart contracts}\\
+It is obvious that a system of smart contracts is necessary to implement the logic and permanently store the data (keep the state). A virtual machine is needed to execute the code of smart contracts. So blockchains that do not have a VM cannot be used. ECOChain's VM can carry out any operations needed. All the above can run in its execution environment.
+\item \emph{Oracle system}\\
+Usually Oracles are needed to feed the smart contracts with real data. These oracles must be decentralized. Oracles must be separate entities and reach a consensus somehow before they inject the data to smart contracts. ECOChain has already done research on this and a yellow paper has been published for this topic.
+\item \emph{Open source clients}\\
+For decentralization to happen the user needs a client to interact with the smart contracts and the dApps. These clients must \textbf{not} be connected to any server. They must also be open source, so anyone can check the code and be sure than nothing malicious is running in them.
+\item \emph{AMM}\\
+The revolution that lead to the explosion of usage in DeFi is caused by the using of Automated Market Makers, or AMM for short. AMM research has been done since 2002 but the idea and implementation in smart contracts is very recent. AMM are based on formulas that set the point of which a total value of a portfolio must be. Liquidity providers must follow this, else anyone can do arbitrage and have a profit against them. We are not going to come in technical details as there are many formulas which have their pros and cons. We are going only to mention that on Ethereum these computations impose a high cost because of the amount of gas needed, so the architectures of the dApps are trying to use the AMMs with the less computation burden and not the optimal according to dApp business logic.
+\end{itemize}
+
+We have already shown that DeFi is very diverse. ECOChain's strategy is to 
+use cross-chain technology and connect to Ethereum and other chains that run a VM. That way DeFi apps can be developed connecting users from other chains and bring transactions or ECOChain. The strong point, again, is the low transactions fees which can improve the survivability of the dApps.
+
+\subsection{Non-Finance dApp Examples}
+ECOChain can be used for any kind of dApp. Non-Financial dApps or hybrid applications can be any kind of apps that need transparency, immutability, or the trustless property. We are going to shortly present some use case, but by no means the following cover all cases. They are given as an example.
+\subsubsection{Online shopping platforms}
+The first use case who we are going to see is a shopping platform. The platform connects buyers and sellers for products (or even services). At a first glance a blockchain is not very useful. But a public blockchain can be used for the following:
+\begin{itemize}
+\item \emph{escrow}
+an escrow system can be automated by smart contracts. Buyer locks the digital asset for payment. Seller sends the product. The buyer after receiving the product unlocks the asset. In case of conflict that asset stays locked. The dApp owner can judge after examining the real-world data and unlock the funds (either refund the buyer or send the payment to the seller).
+\item \emph{commit product data}
+The seller for each product must commit to the smart contract a hash. The hashed data can contain product images, description, price, terms, and conditions (for example DOA, guarantee). Any update of the product info cannot go unnoticed. The seller must submit a new data hash again. For example, if he changes the price or terms etc. This helps both buyers and sellers. Buyers can prove at any time what they promised to bough and the sellers gain trust because they cannot alter their offers.
+\item \emph{transactions}
+Direct payment in assets (token) has obvious advantages. It is direct and has very low fees as no middleman exists.
+\item \emph{ranking system}
+After buying the product the buyer can make a review and vote for the seller(ranking). Without a blockchain the buyers must trust the platform. They must trust that sellers did not bribe the platform for fake scores. Likewise, the platform can blackmail the sellers to lower their actual ranking score. But with smart contract voting this is impossible as the ranking history becomes immutable.
+\end{itemize}
+\paragraph{}
+We have seen that a traditional business can benefit from the blockchain by partially decentralizing its logic.
+
+\subsubsection{Intellectual property rights (IP) industry}
+A niche case, which shows very well that blockchain can have unexpected uses, is Intellectual Property rights. IP are ownership (copyright) on intangible goods and there is a very complex relation between IP owners, middlemen, monetization (usually royalties), consumers and laws. Blockchain may provide a perfect solution for IP management. More specifically, on blockchain the following can be done:
+\begin{itemize}
+\item Create IP identity
+\item Sell or acquire IP rights
+\item Licenses registration
+\item Delegate IP rights for a period 
+\item Receive payment for complex rules for royalties or other means of monetization, without a middleman
+\item Force specific rules to comply with local laws or signed contracts
+\end{itemize}
+It is true that big companies who belong in the entertainment industry (music, film productions, games, book publishers) try to create a unified system which anyone can use and trust. We have already seen this on the last MPEG file format, where they integrated meta data inside the standard about IP. Today there is a standard which connect IP owners, licenses, and digital products. Smart contracts combined with \emph{Digital Identity} can deliver the ideal solution for all parts involved in these industries.
+ 
+\subsubsection{Prediction markets}
+Prediction markets are systems that are based on a monetary position of the participants to predict the outcome of events in the future. The first use case is, of course, betting systems. With decentralization transparency and fairness exist, as the rules are known beforehand, and the process is based on smart contracts. A decentralized oracle system is needed to guarantee the valid results of the outcome.
+\paragraph{}
+Fortunately, prediction markets have use cases other than gambling. Their main purposes are to aggregate beliefs over an unknown future outcome, whatever that is. In short, the positions that the participants take depositing their assets are in fact \emph{aggregate information} on a particular event, which can be used to compute the probability of a future event. To understand the importance of this, there must be understood that the position users take is mirroring their actual beliefs, because their assets are at stake.
+\paragraph{}
+As an example, we can see the results of election polls. They are not accurate or trustworthy. First, many of the asked people can give false information. Second, the companies can provide their results to the political parties, which in turn will manipulate before they publish them. People who really want to have an accurate probability of the outcome are looking at betting websites of the upcoming elections. The logic is simple:
+When gathering statistics, people may lie. They never lie with their money.
+\paragraph{}
+They are three desirable properties that prediction market systems must have to be efficient:
+\begin{itemize}
+\item \emph{diversity of information}
+\item \emph{independence of decision}
+\item \emph{decentralization of organization}
+\end{itemize}
+All the above can be achieved by truly decentralized systems. An application of smart contracts can implement a prediction market. To be successful, the data must be injected in the smart contracts without breaking decentralization. There are two general strategies for this. The first is a decentralized system of oracles. The second is by getting the information from the users directly, when they are taking positions (asset deposits or withdrawals). The second strategy is more difficult because an internal mechanism must be built to incentivize the users and translate their position changes to information that can be used to guess the data of the real world.
+\paragraph{}
+The following are use cases of prediction markets  for a blockchain:
+\begin{itemize}
+\item \emph{betting}
+This is self-explanatory. The events can be sport outcomes or anything else.
+\item \emph{important events} 
+Entities of economic intersect (i.e. companies) are willing to know the real expectations of their existent and potential clients. Political parties want to know the vote intentions of their citizens (election polls). Nonprofit organizations want to know how the donators prefer to see their donates spent etc.
+\item \emph{market research}
+for new or existing products traditional gathering of information may gather inaccurate information. Gathering information using smart contracts can be much more accurate when involves expected profit and some risk because users must deposit digital assets to take a position.
+\end{itemize}
+\paragraph{}
+It should be clear now that dApps are a perfect tool to create prediction markets.
+ 
+\subsection{Other use cases}
+There is a diverse and abundant list of use cases of a public blockchains that cannot be covered in short. Many of them are based on \emph{Proof of Concept}. These are hybrid applications which are mostly centralized, but they use the blockchain to commit to something. The method is simple: they hash their data (images, documents, or files in any form), they commit the hash to the public chain, and they keep the original data off-chain. They can do that when is needed or periodically. If it is done periodically it is called \emph{anchoring}. Not only files but whole databases can be committed that way. Because of the immutable history of blockchain they can build trust for their data and consequently their products (either tangible or intangible). Example of committed data are contracts, agreements, product images and info etc
+
+\section{Conclusion}
+In this paper we examined the economic system of ECOChain. We have analyzed it on a macroeconomic and microeconomic level. We have explained in detail its reward system and transaction cost mechanism. We described its ecosystem, its potential and how it can grow and expand. We tried to see the platform from different angles and points of view: as a long-term or short-term investor and as a developer and a user. We referred to the most common uses cases. We explained its competitive advantages (decentralization, high speed, low transaction cost, developer friendly). We also hinted how ECOChain can acquire market share. Public blockchains, by nature, face diseconomies of scale. This is an undeniable fact which in tech world has given the term of \emph{"Scalability problem"}. Unlike traditional software and databases, which by nature exist \emph{Economies of Scale}, software companies in a sector can gain a critical mass of users and then they can form and preserve a monopoly. We have seen this in Operating Systems, search engines and mobile phones among others. The opposite is true for blockchains; if adoption follows then many blockchains who have quality will get a part of the market share. There cannot be a blockchain to "rule them all".
+\paragraph{}
+ECOChain aims to benefit from another fact, the network effect (Metaclfe's law). The way to achieve this is to connect with other blockchains who already have users. That is why cross-chain technology is under development for ECOChain.
+\paragraph{}
+We hope that all the above can be used by the reader to estimate the real value of ECOChain platform.
+
+\clearpage
+\begin{thebibliography}{9}
+\bibitem{r1}
+"The Optimum Quantity of Money", Milton Friedman and Michal Bordo, 2006
+\bibitem{r2}
+"An Inquiry into the Nature and Causes of The Wealth of Nations", Adam Smith, 1776
+
+\bibitem{r3}
+"A Monetary History of the United States, 1867-1960" , Milton Friedman and Anna Schwartz, 1971
+
+\bibitem{r4}
+"Utility Theory for Decision Making" , Simone Fishburn , 1970
+
+\bibitem{r5}
+"Blockchain Without Waste: Proof-of-Stake" , Fahad Saleh , 2020
+
+\bibitem{r6}
+"Some Econometrics of Price Determination" , A.  Brownlie , 1965
+
+\bibitem{r7}
+"Probability in Economics" , Omar Hamouda and Robin Rowley , 1996
+ 
+\bibitem{r8}
+Metcalfe’s law: \texttt{\url{https://en.wikipedia.org/wiki/Network_effect}}
+
+\bibitem{r9}
+Introducing CeFi and DeFi: \texttt{\url{https://swissborg.com/blog/defi-vs-cefi}}
+
+\bibitem{r10}
+Blockchain Oracles Explained: \texttt{\url{https://academy.binance.com/blockchain/blockchain-oracles-explained}}
+
+\bibitem{r11}
+Atomic Cross-Chain Swaps: \texttt{\url{https://arxiv.org/pdf/1801.09515.pdf}}
+
+\bibitem{r12}
+Understanding the Three Types of Stablecoins: \texttt{\url{https://coincentral.com/types-of-stablecoins/}}
+
+\bibitem{r13}
+Digital Identities and the Promise of the Technology Trio:
+PKI, Smart Cards, and Biometrics \texttt{\url{https://pdfs.semanticscholar.org/8c99/ca55694812d2832f5c6cfed06b0162ffbe86.pdf}}
+
+\bibitem{r14}
+Prediction markets: \texttt{\url{https://en.wikipedia.org/wiki/Prediction_market}}
+
+\bibitem{r15}
+In a Nutshell: Blockchain and IP: \texttt{\url{http://iprhelpdesk.eu/ip-highlights/ip-special-blockchain/blockchain-in-a-nutshell}}
+
+\bibitem{r16}
+Intellectual Property Management and Protection in MPEG Standards : \texttt{\url{https://www.w3.org/2000/12/drm-ws/pp/koenen.pdf}}
+
+\bibitem{r17}
+Blockchain Proof of Concept: \texttt{\url{https://www.intel.com/content/www/us/en/products/docs/servers/ethereum-blockchain-white-paper.html}}
+
+\bibitem{r18}
+Automated Market Makeking(AMM), Chris Slaughter and Brandon Eng,2019  \texttt{\url{https://s3.amazonaws.com/bitsea-static/media/AMM.pdf}}
+
+\bibitem{r19}
+Constant Function Market Makers(CFMM) , Guillermo Angeris and Tarun Chitra, 2020 \texttt{\url{https://web.stanford.edu/~guillean/papers/constant_function_amms.pdf}}
+\end{thebibliography}
+
+\end{document}

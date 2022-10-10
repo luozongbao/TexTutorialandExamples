@@ -1,0 +1,778 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage[english]{babel}
+\usepackage{dblfloatfix}
+\usepackage[sort,nocompress]{cite}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks,
+    citecolor=grey,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=blue
+}
+
+\title{EFG - Ecochain Financial Growth}
+\author{Nikolaos Antonatos antonatos.nik@gmail.com , \\
+Akis Chalkidis akis@ecoc.io}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+\definecolor{yellow}{rgb}{1,1,0.5}
+\definecolor{teal}{rgb}{0,0.5,0.5}
+\definecolor{violet}{rgb}{0.58,0,0.82}
+
+\lstset{frame=tb,
+  language=C,
+  aboveskip=3mm,
+  belowskip=3mm,
+  showstringspaces=true,
+  columns=flexible,
+  basicstyle={\small\ttfamily},
+  numbers=none,
+  numberstyle=\tiny\color{gray},
+  keywordstyle=\color{blue},
+  commentstyle=\color{dkgreen},
+  stringstyle=\color{mauve},
+  breaklines=true,
+  breakatwhitespace=true,
+  tabsize=4
+}
+
+\input{solidity-highlighting.tex}
+
+\begin{document}
+\definecolor{bg}{RGB}{238,255,255}
+\pagecolor{bg}
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Preface}
+\paragraph{ }
+The explosion of DeFi on Ethereum seems to bring a second chance for cryptomarkets. The bubble of 2017 discouraged many investors to get involved in cryptocurrencies in  last years. Now we see the tides turning again. We believe that this is the right moment to expand the ecosystem of Ecochain.
+\paragraph{ }
+EFG is the first ECRC20 token that will be used as a pioneer in DeFi on Ecochain. For this reason we decided to give it the name of EFG (Ecochain Financial Growth). It supports a decentralized application. Its purpose is lending, using ECOC as collateral. All logic is implemented in smart contracts. The system also contains oracles and open source clients for the user interface and interaction with the blockchain. Oracles take the prices in real time from sources that are already trusted by the public (coinmarketcap for example). The architecture is going to be explained in detail in section 6.
+\paragraph{ }
+While initially the collateral will be only ECOC , the long term plan is to integrate other coins (and even tokens) from other platforms. The first platform will be Ethereum and its tokens, because of its userbase size. If demand for DeFi continues, then cross-chaining will expand to other big platforms.
+
+\section{Traditional Finance}
+\subsection{Introduction}
+\paragraph{ }
+Financial sector belong to economics, which is the scientific study of ownership, use and exchange of scarce resources. For each field of economics there are different schools and theories. This is an unavoidable fact, because economics is a social science. In contrast to mathematics, social sciences can't be sure of the causes when studying an occurred event. For finance we are firstly going to present the traditional approach. Finance is interesting in the factors that individuals or companies consider to make a financial decision (buy, sell, hold or just predict a future event). Traditional finance school and theories makes a logical assumption: humans can think rationally. Also, humans want the best for themselves. Consequently, investors seek information, combine and process them using rational thinking and choose the best action or strategy that is the best of them.
+
+\subsection{Basic concept and terms}
+\paragraph{ }
+Traditional finance theorizes that best rational strategy for an investor is to choose the strategy that maximizes his \emph{expected} returns and also minimizes his \emph{risk}. Risk is a term in finance that is quantified and precisely defined. Risk is the variation around the expected value. Let's say that an investor has to choose between two strategies $\sigma_{1}$ and $\sigma_{2}$ with expected returns of $E_{1}$, $E_{2}$ and risks $V_{1}$, $V_{2}$ perspectively. Then for:
+$$ E_{1} = E_{2} , coice: min(V_{1} , V_{2})  $$ and for:
+$$ V_{1} = V_{2} , coice: max(E_{1} , E_{2})  $$
+\paragraph{ }
+The basic reason that rational investors prefer lower risk is that being closer to expected value can increase their ability to survive in the long run. Large financial institutes (for example banks) are willing to pay for lower risk, in other words they may prefer the strategy that has the lower risk even is the expected profits are smaller.
+\paragraph{ }
+Now let us examine some other hypothesis of traditional finance. One basic hypothesis is the \emph{Efficient Market Hypothesis} (EMH), which stated that the current prices of an asset reflect all public information. Assuming that there is no asymmetric information, then the assets trade at their \emph{fair} values. Consequently no one can make a profit without taking a risk. In other words, arbitrage is impossible. Sellers can't sell higher of the actual (fair) value and buyers can't buy less than that at any time.
+\paragraph{ }
+One other basic assumption that is made is that better have a value now than in the future. This is because there is a \emph{risk free} return. The \emph{capital asset pricing model} (CAPM) converts a future value to its today's value , which is always smaller. There is also the \emph{Arbitrage Pricing Theory Model} (APTM), which is a multi factor math model based on linear equations. It takes as inputs macroeconomic indicators that reflect the systematic risk. In the microeconomic scale, the \emph{Option Pricing Theory} (OPT) claims that not only spot prices of an asset but also fair values of derivatives can be calculated. Probably the most accepted and used in practice is the \emph{Modern Portfolio Theory} (MPT), which tries to maximize the expected return of a portfolio for a specific risk level. We are going to present the above theories and hypothesis in more detail, starting from the most used ones.
+
+\subsection{The Modern Portfolio Theory (MPT))}
+\paragraph{ }
+We have already seen that rational investors are after high returns and low risk. The Modern Portfolio Theory - MPT - offers a tool to minimize risk on a expected profit level or vise versa, that is, to maximize returns on a specific risk level. The logic is simple; a portfolio contains many assets. Composing it with assets of different weights, which can be calculated using math, the minimum risk can be achieved. Except of the average (expected or $E$) ROI (return on investment) and variance $V$ or standard deviation $\sigma$ (risk measure), the correlation $\rho$ between the assets are considered. The choice here to achieve the best result is to pick weights $w_{i}$ that minimize the variance(risk).
+\paragraph{ }
+The above are very common tools in finance. They also very well known for statisticians. We are going to present the math formula of them for a portfolio , just for completeness.\\
+Expected return on investment:
+$$E(R_{p}) = \Sigma{w_{i}E(R_{i})}$$
+Standard deviation (risk):
+$$\sigma_{p} = \sqrt[]{\sum\limits_{i}{w_{i}^2\sigma_{i}^2}+\sum\limits_{i}\sum\limits_{j\neq i}w_{i}w_{j}\sigma_{i}\sigma_{j}\rho_{ij}}$$
+Correlation coefficient:
+$$\rho_{i,j} = \frac{E[(i-\overline{i})(j-\overline{j})]}{\sigma_{i}\sigma_{j}} $$
+
+\paragraph{ }
+While the Modern Portfolio Theory is not very modern today (it introduced in 1952) it is still widely used. In the next section we are going to see criticism on it but MPT and CAPM are used even by people who do not belong in traditional finance school.
+
+\subsection{The Capital asset pricing model (CAPM)}
+\paragraph{ }
+While MPT is used to compose or valuate portfolio investments, CAPM is a tool, which considers expected return and risk of an individual asset. CAPM takes into consideration the \emph{risk free} rate , the \emph{systematic risk} and the \emph{unsystematic risk}. In traditional finance they believe that there is an asset who has a positive ROI and zero risk. They usually identify this asset as a short term positive state bond. So we have:
+\begin{itemize}
+\item \emph{risk free} rate $R_{rf}$
+\item \emph{systematic risk}  $R_{m}$
+\item \emph{risk of the asset}  $R_{a}$
+\item \emph{Coefficient} $\beta_{a}$ between the asset and the market performance
+\end{itemize}
+and the formula:
+$$R_{a} = R_{rf}+\beta_{a}*(R_{m}-R_{rf})$$
+$\beta$ is given by the equation:
+$$\beta_{a} = \frac{Cov(R_{a}, R_{m})}{Var_{R_{m}}}$$
+For the cryptocurrency market, which we are interesting in, as systemic risk is we can safely assume a sharp decline in the prices of the leader coins (BTC, ETH) relative to fiat money or to a stablecoin. Because covariance $\rho$ of all cryptoassets (except stablecoins) is close to $1$, if the leader coins crash we expect with very high probability all cryptos to follow. Systematic risk in our case represent the probability of the whole cryptomarket system to fail.
+
+\subsection{The Efficient Market Hypothesis (EMH)}
+\paragraph{ }
+
+Efficient Market Hypothesis has a centric role and is a fundamental for traditional finance school. EMH supports the belief that for all assets the market price is very close to the actual(fair) price, at least in the long run. Consequently, no one can have a ROI above the free risk rate $R_{rf}$ without taking a risk. In other words zero risk strategies can have a maximum ROI of $R_{rf}$. The above can be translated to equally other conclusions, for example active traders in the long run and on average will have a total ROI of $R_{rf}$.
+\paragraph{ }
+EMH assumes that the above hold as long as there are no assymetric information. If some people have inside information then for them it is possible to achieve greater ROI than $R_{rf}$ without taking a risk.
+
+\subsection{Arbitrage Pricing Theory (APT)}
+\paragraph{ }
+Many financial firms found that the use of CAPM (individual asset evaluation) for the MPT (portfolio evaluation) didn't actually work well in practice. In theory CAPM may be correct but fund manager soon discovered that using only historical data of the asset does not provide enough information. Many managers found that including macroeconomic indicators in the formula gave more precise results for asset evaluation. Today most managers in big firms have replaced CAPM for APT. Lets see the math form and explain the difference in more detail:
+$$R_{a} = R_{rf}+\beta_{n}*(R_{m}-R_{rf})$$
+The formula looks the same as the CAPM counterpart. The "only" difference is that $\beta_{a}$ is replaced by $\beta_{n}$. Actually this is a huge difference which introduces much more complexity and difficulty. It is a "price" to pay to get more accurate results. $\beta_{a}$ can be easily computed only by historical data of the asset price. On the other hand, $\beta_{n}$ is computed by a linear equation containing not only $\beta_{a}$ but also macroeconomic indicators with different weights. The difficulty of computing $\beta_{n}$ come in two forms. Fist, the manager must decide which macroeconomic indicators to include in the linear equation and gather this data from trustworthy sources (for example, official statistics from the state). The second is to decide the weights $w_{i}$ of the linear equation. Usually they use empirical methods (trial and error) or even artificial intelligence (AI).
+\paragraph{ }
+Let's see an example. If the unemployment rate today in a country is much higher than before some years and the asset belongs to a sector that its products are of intensive labor nature then the asset is expected to underperform compared to its historical record. Or if the taxation changes the expected performance will change because ROI is the return after taxes. Or maybe the products of the asset belong to an industry that recently boomed, of the asset is expected to overperform etc. Including all these factors in the equation can give more precise predictions for the future value of the asset under examination.
+\paragraph{ }
+For cryptomarkets it is logical to assume that it is heavily related to the real economy world. The difference is that the cryptoassets are not tied to a local economy but only to the global. For example events like pandemic, expectation of lower global economic output, uncertainty etc can have an impact on the prices as well.
+
+\subsection{Estimation of fair values - Option Pricing Theory (OPT)}
+\paragraph{ }
+Finally, it is time to speak about \emph{derivatives}. Derivatives are financial products which are depend on the spot prices of the assets. Futures, options and swaps belong to this category. In traditional finance, their existence is fully justified. Because investors want to minimize their risk they can use derivatives for \emph{hedging}. Hedging is possible when you take an opposite position equal to your current. For example if an investor in his portfolio has a high percentage of an asset then he is at risk (if the asset devaluates much). He can take a \emph{short} position so whatever the outocme the portfolio will have a very low fluctuation.
+\paragraph{ }
+Hedging can be used either for speculation or for hedging. According to traditional finance beliefs all investors are acting rational; so they all want to do hedging for their current positions and never speculate. This is still possible. Let us see an example.
+\paragraph{ }
+Let's say that a bank A holds two currencies $c_{1}$ and $c_{2}$. It holds $c_{1}$ in much larger quantities because it needs it more (lets say its the local currency for the bank). Likewise, a bank B in a different country holds $c_{1}$ and $c_{2}$, with $c_{2}$ the bulk currency. Bank A is afraid that the value of $c_{1}$ may fall in the future. This exposes the bank A at great risk. Of course the bank could sell $c_{1}$ for $c_{2}$ but it needs large amount of $c_{1}$ to operate as it is the local currency. Likewise, bank B needs $c_{2}$ and is afraid that it will devaluate compared to $c_{1}$. Both banks can solve their problem with hedging; Bank A and Bank B agree to exchange $c_{1}$ : $c_{2}$ in a future date at a fixed exchange rate (\emph{future contract}). That way they can bring exchange risk close to zero.
+\paragraph{ }
+The above and all \emph{derivative} products wouldn't be possible if the fair value couldn't be calculated. The difficulty of calculating the fair price is basically for options. They are computed as follows: According to the Efficient Market Hypothesis the (spot) prices of currencies or assets are trading to their fair values. Based on that, traditional finance assumes that the probability of the spot price to go up or down is equal (so it is $50\%$ for each direction). And from that fact math formulas were formed. First was the \emph{Black-Scholes} formula, which is the most used today. Other formulas are the \emph{binomial option pricing} and \emph{Monte-Carlo simulation method}. All these methods form the \emph{Option Pricing Theory} (OPT), which states that it is possible to compute the fair price for all categories and types of options. We are not going to present more details on this subject because the purpose of this paper is not an analysis of derivatives. We are only note that for cryptocurrency markets \emph{Black-Scholes} formula can be used to calculate the fair price of any option.
+
+\subsection{Takeaway}
+\paragraph{ }
+From all the above the reader must keep in mind that in traditional finance the fundamentals are:
+\begin{itemize}
+\item All investors act rationally
+\item Rational behavior means following the strategy that maximizes the expected profit and minimizes the risk
+\item Free markets are efficient; the current prices are close to fair prices
+\item profits higher than the risk free asset can't be achieved with zero risk; expected higher profits carry higher risks
+\item Expected profits and risks can be calculated using formulas from statistics field. Investors can form a portfolio according to their desired risk level
+\item The fair value for all derivatives can be calculated; investors can use them as a tool to do hedging; that way they can change the risk level without the need to change their portfolio
+\item There is no speculation; investors are not willing to increase their exposure to risk (unwilling to have naked positions)
+\end{itemize}
+
+\section{Behavioral Finance}
+\subsection{Introduction}
+\paragraph{ }
+Some economists raised criticism on the fundamentals of traditional finance. They argued that the belief that all investors, and mostly individuals, make rational decisions, is simply not true. Individuals are human beings. To theorize that each of them gather all available data of assets, computes the expected profit and risk etc is something that doesn't happen in real world. Some of them may use financial consultancy but many others decide and act on their own.
+\paragraph{ }
+From the above fundamental change of view the \emph{behavioral economics school} was born. \emph{Behavioral finance} belongs to this school. They mostly believe that while big institutions and professionals act or try to act rationally, the individuals usually don't. Even for big institutions(banks, mutual funds etc) there can be failure in management. Intentions or commands may not carry well by communication channels. Big corporations have many levels of management and commands from higher management may not be passed intact until they reach the low levels of hierarchy, where they will be implemented. But mostly behavioral finance is focusing on individuals and why they may act irrationally, according to traditional model.
+\paragraph{ }
+Another strong point against traditional school is their claim that public information is imperfect. Asymmetric information exists more often that traditional theory wants to believe. So even for investors who follow "rational investment" can't do so as they often luck sensitive information, because it isn't publicly available.
+\paragraph{ }
+Finally, and most importantly, they don't adopt the Efficient Market Hypothesis. They argue that there are market anomalies for long periods of time, that is, current prices deviate too much from their fair values. They support their claims by research done on stockmarkets, which takes the historical data and the traditional formulas (CAPM, APT, OPT etc) and compares them for long time periods. They claim that EMH and empirical evidence do not match. This claim separates completely the behavioral thinking from the traditional one. Because of the importance of the matter, we are going to first see their objections on EMH and later analyze the reasons why individuals do not act rationally by the traditional school beliefs.
+
+\subsection{Objections on Efficient Market Hypothesis (EMH)}
+\paragraph{ }
+Most arguments against EMH are based on historical periods of stockmarkets, where the current value remained much higher or much lower from the fair price. Good examples are the "Great depression", started in 1929 and remained for too long. Prices where overevaluated and after the crash remained underevaluated for a long period of time. Other good example is the crash of 1987 in the US stockmarket. Maybe the most known is the "dot com bubble", where stock prices for tech companies were overevaluated for a long period of time and finally crashed sharply. 
+\paragraph{ }
+Other good point against EMH are \emph{sessional patterns}. In most countries after new year celebration the values are increased without a reasonable explanation (for example in January in Unites States or February in China - Lunar new year). 
+\paragraph{ }
+Some research papers have shown that many investors are affected by the \emph{ Size Effect}. They prefer to invest in big companies and strong brands even if the ROI is significantly lower. They avoid medium size companies with high returns even when statistics calculate the same risk level. In other words they behave like consumers who prefer to buy products of well known brands even when the prices are higher than the competition.
+\paragraph{ }
+There is an extensive bibliography and research of Efficient Market Hypothesis. We believe that what we presented here are already enough to show why behavioral finance has objections on EHM. Next we are going to present why individuals do not actually act as traditional finance supposes to.
+
+\subsection{Why individuals may act irrationally}
+\paragraph{ }
+Behavioral economists believe that in real world individual investors are human beings, so their decisions are based not only on logic but also on their personal beliefs, culture, education, current mood and emotions etc. A good example for this is gambling. According to traditional finance there are no investors that will buy an asset if its expected value is negative (as they expect a loss). Following this logic, players who understand the rules of a game will never gamble, as all of these games have a negative expected return. This example shows that some investors are actually after high risk, because they want big profits even if they must risk big looses asymmetrically (more loses than gains in the long run).
+\paragraph{ }
+Now we are going to present the most common reasons (according to behaviorists) that an investor's decision can be made against the traditional finance beliefs:
+\begin{itemize}
+\item \emph{Overconfidence}\\
+Investors may have overconfidence. It may be in their character or because they had a recent big success (financial or of other nature). They believe that they can "see" or interpret the data better than the others.
+\item \emph{Loss aversion}\\
+There are people who are willing to sacrifice the probability of high profits to avoid a much lower probability of losses. Consequently, they don't take the best financial decisions. These people have the exactly opposite mindset than of those who are inclined in gambling. 
+\item \emph{The disposition effect}\\
+The disposition effect is another form of loss aversion. According to this, investors sell more easily winning positions than losing positions. People who bought an asset higher than the current price do not sell, but wait until the price rise again to the old levels, so they can sell "without having a loss". Similarly they are hasty to sell an asset when the current price is above the price they bought because they will "make sure of a profit". They don't consider at all the current market data.
+\item \emph{Inertia}\\
+Some people are very reluctant to take a decision, so they don't act or act very late. People who belong in this category usually luck self-confidence.
+\item \emph{Framing}\\
+Financial data can be presented in different ways. Usually companies try to manipulate the decisions of investors. While they present the correct data, they present it in such a way to look more attractive than they should (for example, they do comparisons of results with selected periods to make them look better than they are). Even objective announcements can be misinterpreted by investors, leading them to non rational decisions.
+\item \emph{Failure in diversification}\\
+For some reasons many investors are failing to diversify their portfolio. They either compose it in such a way to have high risk or keep one or two assets only. There are many reason for failing. Most common is that people have a preference to an industry or category product. Consequently, they invest in these, having a false impression of low risk. But actually diversification is not possible if someone invests in one category only. It needs different assets with negative correlation to achieve a low risk portfolio.
+\item \emph{Information misuse}\\
+This simply means that people do not understand what the numbers represent. Or they just miscalculate. Or, subconsciously, are influenced by some specific number. The reason for this are many. One reason is that people like round numbers more than floats. The second is that some investors are superstitious and have "lucky numbers". Other is cultural, where some numbers can represent good or bad luck (these numbers vary between countries a lot). 
+\item \emph{Conservatism bias}\\
+Conservatism bias is similar to loss aversion but is more general. There are individuals that are very conservative. Conservatism level depends on family beliefs, culture, sex and age among others. Conservative people tend to pursue zero risk levels. They will avoid very high expected profits even if acceptable risk level is involved.
+\item \emph{Group behavior}\\
+People tend to mimic behavior of their peers. In the financial world "peers" can be other investors who hold the same or similar assets. It is also called the \emph{Herd Instinct}. This phenomenon is visible in boom and panic periods. In boom periods, when individuals see a stock price (or industry index) rising, they are drawn into the market in a kind of \emph{bandwagon effect}. So they buy without thinking what the fair value price of the asset is. Same thing is happening in panic periods. When prices are sharply falling many investors are rushing to sell at any price (even if it is close to zero). Again, they don't consider the fair price of the assets at all. This phenomenon appears often to cryptomarkets. It already happened many times. The most visible occasion happened in 2017.
+\item \emph{Emotions}\\
+The mood is not same every day for an investor. A good or bad event changes temporary the view of a human being. A good event can bring optimism, while a bad one pessimism. Depending on the day, the investor can see the prospects of an asset or portfolio different than it is. They are more willing to buy when they are in good mood and more willing to sell when they are sad or depressed.
+\end{itemize}
+All of the above are included in theories of behavioral economics. We are going to present in brief the most known of them.
+
+\subsection{The BSV model}
+\paragraph{ }
+Barberis, Vishny and Shleifer published their research in 1997. The subject was \emph{market sentiment}. They claimed that they found strong indications against EMH. More specifically, they found that investors have an underreaction for assets that have a very short history record (less than a year) and overrreaction for long horizons (three to five years) of an asset. They claimed that the new information did not integrate properly in the current market price. Consequently, sophisticated investors could earn profits above the risk free rate by taking advantage of underreaction and overreaction, without bearing the corresponding risk. This claim is a blow in the face for EMH.
+\paragraph{ }
+They tried to find the cause of the above. In their paper they argue that the causes are \emph{conservatism} and \emph{representativeness heuristic}. Conservatism, which already mentioned in the previous section, is the cause of underreaction. Conservative investors are afraid of the new assets and don't trust their financial date because of their very short history. Because of this they react "to little" or not at all. On the other hand, representativeness heuristic is the cause of overreaction. According to this, investors "see" patterns in financial records. These patterns do not actual exist (are meaningless) but the investors give them meaning. They believe that the data are trustworthy and carry much value and information because they are too long. Representativeness heuristic is a term in psychology and is supported by various scientists. Whether this is the actual cause of the overreaction  or not, it very often exist for the new information in markets. Concluding, new financial information is not integrated properly or in time to the current values.
+
+\subsection{The DHS and DH models}
+\paragraph{ }
+In 1998, Daniel, Hirshleifer and Subrahmanyan published their paper. They tried to explain the above BSV findings of overreaction and underreaction for the markets. They accepted that overreaction and underreaction exist and argued that the reasons for this is \emph{overconfidence} and \emph{self-attribution bias}. 
+\paragraph{ }
+We already mentioned overconfidence above. Investors with overconfidence believe that they can extract more detailed information of the public data than the others. As a consequence, they overreact to news and financial information, causing price deviation from their fair value because they take action (buying or selling) in a non-rational decision process. 
+\paragraph{ }
+Self-attribution bias is in psychology the fact that a person tends to attribute successes to his own skills while his failures stem from external unpredictable factors (some refer to it as "bad luck"). DHS claim that they found empirical evidence  that the higher the returns in a previous period, the more probable is that the investor agree with a statement claiming that his good performance (high profits) reflects his personal  investment skills; and the opposite for low performance.
+\paragraph{ }
+In 1999 ,  Hong and Stein adopt a different approach of BSV model. They emphasize the results of interaction between heterogenous agents. They define two different types of financial agents, the \emph{newswatchers} and the \emph{momentum traders}. They assume that both types are partly irrational because they process different sets of information. The newswatchers make forecasts based on signals that they privately observe about future fundamentals. Momentum traders consider past price changes. Their limitation is that their forecasts must be simplified functions that can use historical prices. Also, they assume that private information diffuses gradually across the newswatcher population. Underreaction comes from the gradual diffusion of
+information. Underreaction makes possible for momentum traders to enter the market and profit. Consequently, underreaction starts a circle of overrection.
+\paragraph{ }
+There are other models as well for behavioral finance but the three above are the most known and accepted. Maybe the reader here believes that behavioral school was formed near the millennium, which is not correct. 
+\subsection{The Prospect Theory}
+All the above were inspired from the \emph{Prospect Theory}. In 1979, Kahneman and Tversky published their work "Prospect Theory: An Analysis of Decision Under Risk" which contains the first organized work on behavioral finance. The theory rewarded a nobel prize in 2002. Their theory contained loss aversion and \emph{reference dependence}. Loss aversion, inertia and reference dependence try to explain the \emph{endowment effect}. The endowment effect is the paradox that people are more likely to retain an object they own than acquire that same good or asset when they do not own it.
+\paragraph{ }
+We already have explained loss aversion and inertia. But what is reference dependence ?
+When an investor evaluates an assets he has a subjective reference level. This reference level usually is the point that he bought or sold the asset in the past. Profit or loss then is compared to that level. Gains or loses are subjective because they depend of that specific personal point of the individual.
+\paragraph{ }
+\subsection{Historical examples that support behavioral economics theories}
+\paragraph{ }
+We already mentioned the great depression in 2009, the dot com bubble, the 1987 market failure. Actually, the stock markets are full of events of great failures (abnormal crashes) or unexplained boom periods. These boom or panic periods do not always reflect the real situation in economy. This supports behavioral economics theories for some economists. There are other stories, outside of stockmarkets, that seem to support these theories. The most know is the \emph{Tulipmania}.
+\paragraph{ }
+It is considered the first recorded speculative asset bubble in history. Here the assets where just flowers (tulips). Tulips, depending or their characteristics (shape, color etc) had different prices. The prices of rare (and not only) tulips skyrocketed in 1936.
+But let's explain in more detail what happened.
+\paragraph{ }
+Tulipmania happened in Dutch in 1630s.Dutch was the richest country in the world at that time. The reason for this was sea trade and the colonies they had around the globe. Middle class emerged at the time. The first company was found. Commodity market (stockmarket for goods) was also found. Most Dutch people considered very rich according to the standard of other countries. The raise of middle class brought a tendency for luxury and expensive lifestyle. One of the luxuries was the ownership of very rare tulips (colors and shape). Blossom of tulips were very slow and difficult. Blossom needed 10 years while many plants failed to blossom. Also, to achieve rare color and weird shape the tulips should partially affected with a virus , which would change the genes of the tulip but would not be able to kill the plant. This was very difficult. So, not all tulips were the same. The expensive ones, which were in demand, were actually very scarce.
+\paragraph{ }
+Finally a specialist on tulips managed to achieve a very rare tulip. From this tulip he had the bulb which could blossom after 10 years. He knew that after selling, other experts will plant and in the next generation this special tulip would stop to be rare. He wanted to keep the monopoly, so he sold the tulips only by the condition of the buyer to not reselling the plant or flower (be only a consumer). The selling were taken place in front of a notary. This happened before 1930 (in 1920s). As expected, some buyers didn't comply. After ten years (the next tulip generation) the monopoly of the rare species was converted to an oligopoly.
+\paragraph{ }
+Until this time tulips were something like a jewelry. Actually the farmers didn't usually make a considerable profit. They had to buy a bulb at an expensive price, wait for ten years, and also risk for a non blossom event. At the same time , many traders, which belonged to clubs or guilds, where in haste to buy tulips or bulbs. As farmers wanted to normalize the risk they had and demand was much higher than the supply, farmers though to sell with a discount to traders the tulip that will blossom in the future. This was done again with a contract, in front of a notary. So the price were decided today for the future product.
+\paragraph{ }
+This, of course, is a \emph{derivative}, a \emph{future}. This is the first record in history that a \emph{derivative} product was created. These contracts soon became anonymous because the traders wanted to buy or sell them easily. They were buying or selling them to other traders. Before the year 1936 only traders and farmers were interested in tulips. The contracts were sold between them every night and the prices were slowly gone up until the traders had the impression that much and easy money can come from these magic contracts.
+\paragraph{ }
+The word past to the public. Common people, who didn't actually know anything about tulips start joining the trading guilds just to buy and sell later for higher. Prices started raising in parabolic. In 1936 prices skyrocketed. Some rare tulip contracts sold for a value of a house. Price went up so fast that attracted a very large portion of the Dutch population. The price always went up, never down. Anyone wanted a sure profit, fast and easy.
+\paragraph{ }
+On 6 February , 1937, in the Haarlem city, in the guild's hall, which the trading was happening each night, some traders released that the prices were too high. They preferred to sell, even for a small discount, to "make sure of the profit". With the current level prices they would get rich without further risking. This night many traders wanted to sell for a discount. This fact scared many buyers. The prices start falling, causing a snowball effect. Suddenly the supply was very high, because the contract owners panicked seeing the price to fall so much in a couple of hours. Demand fell near zero as there were no buyers to buy. Until the morning, the contract prices fell around 95\%. Haarlem owners did what was logic: they bought a fast horse and run to the nearest city to sell at discount, before word spreads out. They first newcomers sell at heavy discounts.  Panic striked to those cities too. In 4 days the word spread in the whole country. Rare tulips rendered worthless. As a sidenote, it took 4 days because there were no advanced communication systems at that time(mobile phones or internet). With today's technology (digital markets) the bubble could burst in less than an hour.
+\paragraph{ }
+The above example is used much from behaviorists because it supports much points of their theory. Inefficiency of the markets (the price was higher than the fair value for decades) and irrational behavior are clearly presented in the story. Overconfidence, inertia, framing ,failure in diversification , information misuse and herd instinct (buying at boom period and selling at panic) are all present.
+
+\subsection{Behavioral Finance in cryptomarkets}
+\paragraph{ }
+In this paper we are interesting in cryptocurrency markets. This paper does not want to reject the traditional school. But our belief is that in cryptocuurency markets behavioral theories describe better the investor's profiles. We believe that there are more speculators and fair prices are difficult or impossible to calculate for digital assets, whether they are coins or tokens. The investors are mostly individuals and no big institutions exist yet in crypto world as it happens to traditional markets. With this in mind we have designed our strategy for DeFi; the upcoming dApps target mostly to today's cryptomarket investors (individuals).
+
+\subsection{Takeaway}
+\paragraph{ }
+Of course the reader doesn't need to absorb the information of all these theories. He must just remember that there are theories that oppose the traditional school. They argue that investors can act irrationally or at least their behavior is unpredictable; the markets are not always efficient. And that traditional school theories contradict with recent empirical evidence of cryptomarkets.
+
+
+\section{EFG}
+\subsection{Explanation}
+\paragraph{ }
+Here we are presenting the financial logic of EFG. In the next section we are going to present the technical details.
+\paragraph{ }
+This dApp solves the problem for someone that holds crypto and needs liquidity to invest in cryptomarkets without the need to sell his assets. If he wants to keep his \emph{long position} on the assets because he believes that they will gain in value then he can just use them as a collateral to get a loan. The system accepts ECOC as a collateral but later, as we have already said in the \textbf{preface}, other coins on different chains will follow.
+\paragraph{ }
+When the user locks his asset he can receive an amount in EFG tokens. EFG is an ECRC20 standard and it has fixed total supply (of $1,000,000$ tokens). He must pay interest to the system for the EFG he received. Whenever he wants he can pay back his loan. The investor must return exactly the amount of EFG he borrowed plus the interest for the time period elapsed. The interest rate is per year and the total interest depends on the block timestamps.
+\paragraph{ }
+Let's see the parameters of the system. These are the fixed interest rates on each asset and fixed safe margins. 
+Let:
+\begin{itemize}
+\item $c_{ec}$ be the amount of collateral of ECOC
+\item $r_{ec}$ be the interest rate of ECOC in one year
+\item $s_{ec}$ be the safe margin of ECOC/EFG
+\item $t_{0}$ the timestamp of the block that the loan started
+\item $t_{1}$ the timestamp of the repay block
+\item $x_{0}$ the exchange rate between ECOC and EFG (Oracles inject the exchange rate here) at borrow time
+\end{itemize}
+After locking at $t_{0}$ the user can withdraw EFG equal to $c_{ec}*s_{ec}*x_{0}$\\
+The user can repay at any time. The interest is :\\
+$$I =c_{ec}*s_{ec}*x_{0}*  \frac{r_{ec}*(t_{1}-t_{0})}{365*24*60*60}$$
+because timestamp is in seconds. So the user must repay the amount $rp$
+$$rp_{ec} = c_{ec}*s_{ec}*x_{0} + I $$
+$$rp_{ec} = c_{ec}*s_{ec}*x_{0} + c_{ec}*s_{ec}*x_{0}*  \frac{r_{ec}*(t_{1}-t_{0})}{365*24*60*60} $$
+$$rp_{ec} = c_{ec}*s_{ec}*x_{0}(1 + \frac{r_{ec}*(t_{1}-t_{0})}{365*24*60*60})$$
+\paragraph{ }
+There is a liquidation point. The system has the right to liquidate if the collateral fall below the current debt. Current debt $rp_{ec}$  must be higher than the total collateral $cl_{ec}$ in EFG value. So the system can liquidate only in the case when
+$$rp_{ec_{c}} > cl_{ec} \Longrightarrow c_{ec}*s_{ec}*x_{0}(1 + \frac{r_{ec}*(t_{c}-t_{0})}{365*24*60*60})>c_{ec}*x_{c}$$
+Because the collateral is always positive , that is , $c_{ec}>0$, we finally have:
+$$x_{c} < s_{ec}*x_{0}(1 + \frac{r_{ec}*(t_{c}-t_{0})}{365*24*60*60})$$
+where $t_{c}$ is the current block timestamp and $x_{c}$ the current exchange rate. The above condition is necessary (and is implemented inside the smart contract) to hold for the system to liquidate the position.
+
+\subsection{Uses}
+\paragraph{ }
+A natural question arises, where EFG can be used. EFG , as an ECRC20 token can be transferred freely. Consequently, EFG can be sold in the market. Or can be just being hold, if the owner believes that its price will raise in the future. It can be used to repay the loan, freeing up the collateral. Finally, it can be \emph{farmed}, yielding another ECRC20 token, namely GPT (Grace Period Token). In section \textbf{5} we are going to explain the role of GPT in the system.
+\subsubsection{Speculation}
+\paragraph{ }
+As we have seen in the previous chapter many investors are after high risk and high profits. EFG is a good opportunity for them. If the ratio of ECOC/EFG, or more generally, any collateral to EFG goes higher then they can have a profit if the difference of exchange rate on the borrowed amount is greater than the total interest. Because they can repay back the collateral any time their profit $prf$ at a time $t$ is:
+$$ prf_{t} = \delta_{x_{t}}*c_{ec} - I = \delta_{x_{t}}*c_{ec} - x_{0} \frac{r_{ec}*(t_{t}-t_{0})}{365*24*60*60}$$
+Of course the profit can be negative, so they may have a loss at time $t$. The risk for the investor is the liquidation. The closer in the liquidation point, the greater the risk of a forced liquidation (let us call this \emph{margin call} point). The closer the safe margin of ECOC/EFG $s_{ec}$ to $0$ the less the risk is for the investor, but also the less they can borrow. The closer the safe margin to $1$ the more dangerous. For this reason the dApp starts with a margin that is safe for the investor. We set $s_{ec}=0.25$ for this reason.
+\subsubsection{Hedging}
+\paragraph{ }
+Hedging is when an investor bets on a position that is the opposite of his current one. Whatever direction the exchange rates take the investor is safe because the fluctuation (portfolio value) is low. Hedging is a strategy that rational investors follow (low risk and low expected profits). For the time being, hedging can't be carried out with only one pair. But in the future, when more coins are introduced to the system, a combination of collaterals can implement a hedging strategy.
+\subsubsection{Passive Income (staking GPT token)}
+\paragraph{ }
+The investor also has the option to temporary lock his EFG tokens. Doing this he receives a reward in another token(GPT). This action brings him passive income because GPT has a value. There is demand for it because it can be used to increase the grace period of a margin call (it delays the liquidation).
+\subsection{Initial distribution}
+\paragraph{ }
+It has already been mentioned that the supply is fixed at $1,000,000$ tokens. Ten percent($10\%$) is going to be withhold by the issuer and the rest ninty percent($90\%$) will be moved and owned by the lending smart contract. Anyone can get and withdraw EFG if he uses a collateral. 
+
+\section{GPT}
+\subsection{Description}
+\paragraph{ }
+\textbf{GPT} (Grace Period Token) is just used for delaying the liquidation of the collateral. It can also be farmed using \textbf{EFG}. The farming rate is $y_{GPT}=a_{EFG}*1286*10^{-16}$ per second , where $y_{GPT}$ is the yield (reward) and $a_{GPT}$ the locked amount of \textbf{EFG}.As long as EFG is locked, GPT is given as a reward. GPT is an ECRC-20 token. Its total supply is fixed and equals to $10,000$ tokens. It can't be created on burned. GPT token will be a separate token (following ECRC-20 standard) but can be accepted from the lending smart contract.
+\paragraph{ }
+\textbf{GPT} can be transferred freely (because it is an ECRC-20). It can also be used to delay the liquidation of a collateral. The amount to be used is equal to $5\%$ of the debt in EFG (initial loan plus interest). It must be used before the liquidation point. Each grace period has a legth of 7 hours.
+\subsection{Initial distribution}
+\paragraph{ }
+The supply is fixed at $10,000$ tokens. Similarly to EFG token, $90\%$ of the GPT token is initially be deposited to the lending smart and ten percent($10\%$) is going to be withheld by the issuer.
+
+\section{EFG technical information}
+We are going to present how the decentralized Application actually works. Non tech savvy investors can skip this chapter.
+\subsection{General architecture and logic}
+\paragraph{ }
+In traditional (centralized) applications there is \emph{frontend} and \emph{backend}. Backend, among others, has a database or some other persistent storage system. The access to backend is permissioned, limited to the owner of the application. But in decentralized applications the backend is the blockchain itself. Read access is permissionless, while writing (changing the smart contract state) must comply to the smart contract rules.
+\paragraph{ }
+The smart contracts for the tokens do not specify any roles. But the lending smart contract defines the following roles:
+\begin{itemize}
+\item \emph{owner} \\
+He is the deployer of the smart contract. His basic role is administration. He can change some parameters of the system and has also privileges on oracle authorization.
+\item \emph{Oracles} \\
+Oracles are the only entities who are authorized to inject real world data to the smart contract. Specifically, they inject the exchange rates for each second(timestamp) of each pair of EFG (asset / EFG).
+\item \emph{Pool founders} \\
+Pool founders are users who decided to invest a significant amount on EFG and create a pool. After the creation of the pool the users can join and  borrow EFG. The profit for the founders is the interest of the borrowing EFG. They can also liquidate user positions if the collateral falls short.
+\item \emph{Users} \\
+Users have the following options: depositing assets as collateral, borrowing, paying back, withdrawing or farming EFG. They can also delay the liquidation by using the GPT token.
+\end{itemize}
+
+The dApp consists of the following parts:
+\begin{itemize}
+\item \emph{Frontend} \\
+Frontend is the client to be used by the common users. It consists of a web wallet and a User panel UI, which displays information about the current assets and has the ability to interact with smart contract (lending and staking).
+\item \emph{Smart contracts} \\
+They are the "heart" of the dApp, implementing all the logic and saving all the necessary data on blockchain.
+\item \emph{Oracles} \\
+Oracles are actually servers that gather information (exchange rates), store them in their database and inject them in the lending smart contract calling special function that only they have access. The oracles are \emph{backend} only.
+\item \emph{Admin panel} \\
+This is a frontend client, but only the admin can use it with his private key to interact with the smart contracts. He can check special statistics and call smart contract functions that only he has access (for example to replace an oracle). 
+\item \emph{Centralized management} \\
+This part is accessed by the dApp maintainers. It consists of frontend and backend. It watches the Oracles, if they are misbehaving it informs the admin to replace them. It can also gather and compute statistics for the dApp, feeding the admin panel. Finally, it can deposit tokens in case of emergency in the lending smart contract.
+\end{itemize}
+From all the above, only the first part is used by common users. The simple user is safe, because he interacts directly with blockchain and his frontend client isn't connected to any backend. His private keys are safe.
+
+The following diagram visualize the above.
+
+\includegraphics[scale=0.3]{EFG_Architecture.png}
+\subsection{Smart contracts and their functions}
+\paragraph{ }
+We want to clarify some general things about smart contracts. Smart contracts are consisted by functions. 
+Functions can be internal or external. Internal functions can't be called from outside,they are only internally used by smart contract. External functions can be called by anyone (if there are no restrictions) or by specific entities. We are going to present only external functions here, because these kind of functions are of the user's interest. 
+\paragraph{ }
+Another distinction we can make is between "read"and "write" functions. Read functions do not alter the state of the smart contract. For this reason they don't cost anything. In this occation we say that we are \emph{calling} the function. Because ECOCHAIN is a permissionless blockchain, anyone can call these functions and get the returned data of the smart contract(without paying any fee). On the other hand , functions which alter the state of the smart contract are "writting" on the blockchain, so using such a function the user must pay a small fee (in ECOC). The use of such a function, if carried succesfully , is a valid \emph{transaction}. In this occation, we are saying that we \emph{send to} the function.
+\paragraph{ }
+The user can use the official UI to interact with the dApp. But, let's not forget that EFG is trully decentralized. Consequentally, UI exist only for user-friendliness reasons. Someone, be it a programmer or a common user, can interact \emph{directly} with smart contracts, skipping the UI entirely, if he so wishes. Programmers can use our SDKs, while common users can use their core wallet.
+\paragraph{ }
+A word about Ecochain's core wallet. The user can see at left bar the smart contract tab. There are three option under this: create contract, send to and call. The user can use "send to" to carry a transaction or "call" to read the result from any call function. User must pass the correct arguments to each function. We strongly reccomend the use of official UI from users, especially those that are not tech savvy. We just mention the core wallet to prove how decentralized EFG is, dispell any doubt and give an extra option to advanced blockchain users.
+
+\paragraph{ }
+Considering the above, it is clear that EFG is a decentralized application. Decentralization brings high security and freedom but also carries the burden of responsibility for the user. As there is no server, the private keys do not exist anywhere except the user's device. So, the user must be sure that he keeps his keys safe (proper backup strategy). There is no "username", "password" or "reset password" service. A loss of private keys inevitably results to permanent loss of the user's funds.
+
+\subsubsection{Tokens of EFG dApp}
+\paragraph{ }
+EFG and GPT tokens are ECRC20 compliant as they follow the ECRC20 interface. The following links show the smart contract source code for EFG and GPT:
+\begin{itemize}
+\item \texttt{\url{https://github.com/Defi-EFG/EFG-smart-contracts/blob/develop/lending/ECRC20/EFGToken.sol}}
+\item \texttt{\url{https://github.com/Defi-EFG/EFG-smart-contracts/blob/develop/lending/ECRC20/GPTToken.sol}}
+\end{itemize}
+It can be seen that the tokens are following the interface of ECRC20:
+\begin{lstlisting}[language=Solidity,firstnumber=7,escapechar=@]
+@\colorbox{yellow}{import "./IECRC20.sol";}@
+import "./SafeMath.sol";
+
+
+contract EFGToken is IECRC20 {
+\end{lstlisting}
+Because ECRC20 does not deviate from ERC20 standard (ethereum) and is very well known and documented, we are not going to spend more time analyzing it.
+\paragraph{ }
+After launching the EFG application, any ECRC20 token can be added and accepted as a collateral. For this reason we can use wrapped tokens and atomic swaps. Tokens or native coins, which belong to other platforms (blockchains), can be imported in EFG dApp. The logic is that the user can swap the original asset with the wrapped token on ecochain, which follows the ECRC20 stanfdard, and join the application. After withdrawal the user can swap back his asset to the original chain. Using this strategy, EFG dapp can expand without any limitation.
+
+\subsubsection{Staking GPT smart contract}
+\paragraph{ }
+Staking smart contract is much simpler than lending. It consists of 2 read functions and 3 write functions. The purpose of this contract is to \emph{farm} the GPT token by locking EFG. While the prevailed term in DeFi now is "farming" and "yielding" we preffer to use the term "staking" for two reasons. First, staking is more widely known while farming as a term is relatively new. The second reason is to stress the point of the tight connection (regarding functionality) that exists between EFG and GPT.
+\paragraph{ }
+Before seeing the functions, let's have a quick look at the constructor of the smart contract. As a note, the source code can be found at \href{https://github.com/Defi-EFG/EFG-smart-contracts/blob/develop/lending/StakingContract.sol}{StakingContract}
+\paragraph{}
+Constructor:
+\begin{lstlisting}[language=Solidity,firstnumber=20,escapechar=@]
+ function StakingContract (address _EFG_addr,address  _GPT_addr) public {
+        mintingRate = 1286; /* mining rate per second in e-16 */
+        GPT = ECRC20(_GPT_addr); /* smart contract address of GPT , 4 decimal places */
+        EFG = ECRC20(_EFG_addr); /* smart contract address of EFG , 8 decimal places*/
+    }
+\end{lstlisting}
+The Staking smart contract is initialized by acceptinng the EFG and GPT tokens. Additionally, as it can be seen at line 21, the minting rate is set to $1286*10^{-16}$ per second. If the total EFG is locked then the GPT will be extracted in about three months. But in practise a significant portion of the EFG is going to be circulated in the markets. As a result the GPT minting period will be longer.
+
+Send to functions:
+\begin{lstlisting}[language=Solidity,firstnumber=42,escapechar=@]
+function mintGPT(uint256 _amount) external returns(bool result)
+\end{lstlisting}
+mintGPT() accepts as input the EFG amount that user wishes to lock. In short, this is the function to deposit, lock and start minting GPT. The user must use approve() function first of the EFG token to approve the amount for the staking smart contract. We refer to this for explanation and education reasons only, because users which use the official UI do not need to do anything about approving (everything is done automatically under the scenes).
+\paragraph{ }
+The transactiosn fails if:
+\begin{itemize}
+\item smart contract does not have any GPT left (all GPT is extracted)
+\item user does not have enough EFG (lower than the input argument) or the amount didn't get appoved prior from the user to smart contract
+\end{itemize}
+
+\begin{lstlisting}[language=Solidity,firstnumber=110,escapechar=@]
+function withdrawEFG(address _beneficiar, uint256 _amount) external returns(bool result){
+\end{lstlisting}
+withdrawEFG() has the opposite effect of the previous function. Users can withdraw their EFG any time the full amount or partially and to any public address they wish(it can be different than the deposit address). For example, they can directly withdraw to an exchange. The user can withdraw any time, there is no restriction. Of course on withdrawal the GPT minting process is stopped for the user.\\
+The transactiosn fails if the requested amount is higher than the deposited one.
+
+\begin{lstlisting}[language=Solidity,firstnumber=75,escapechar=@]
+function claimStakedGPT(address _beneficiar) external returns(bool result)
+\end{lstlisting}
+When claimStakedGPT() is called by the user the GPT that was minted is fully withdrawn to the desired address(again, the user can choose freely the destination address). This function can be called even after EFG has been withdrawn. In other words, the user can withdraw the GPT at any time he wishes.\\
+The transactiosn fails if no GPT amount is left inside the smart contract (all GPT is already extracted by the users).
+\\
+\\
+There are also two call functions:
+
+\begin{lstlisting}[language=Solidity,firstnumber=143,escapechar=@]
+function unclaimedGPT() public view returns(uint256 contractGPTBalance)
+\end{lstlisting}
+This function has only one purpose, to return the total balance of GPT for the smart contract. It is automatically called by the UI before the user sends to claimStakedGPT() or mintGPT(). The mentioned transactions will fail if the GPT balance is zero. By calling unclaimedGPT() first the UI saves gas for the user: if the functions returns zero then it just notifies the user and never initiate an unecessarry transaction.
+
+\begin{lstlisting}[language=Solidity,firstnumber=134,escapechar=@]
+function mintingInfo(address _beneficiar) external view returns(uint256 lockedEFG, uint256 lastTimestamp, uint256 unclaimedAmount)
+\end{lstlisting}
+This function is used to extract info about the minting of a user. The locked EFG amount , time of last deposit and unclaimed GPT amount are returned. UI calls this function to get the data and display them to the user. It is costless.
+\paragraph{ }
+The logic of this smart contract is clear. Its only purpose it for distributing the inital GPT to the users, proportionally to the amount they wish to lock their main token (EFG). Next, we continue by explaining the functions of the lending contract.
+
+\subsubsection{Lending EFG smart contract}
+\paragraph{ }
+This smart contract is the heart of the dApp. Borrowing, repaying, liquidation and everything related to it exists here. The source code of the smart contract can be reached at  \href{https://github.com/Defi-EFG/EFG-smart-contracts/blob/develop/lending/LendingContract.sol}{github}. There are 16 write functions and 17 read functions. Because of their number we are going to present the most in short, saving time for our analysis and explaination for the most important ones.
+\paragraph{Roles}
+Before continuing, we must present the roles that exist. There are four type of roles for the lending smart contract:
+\begin{itemize}
+\item contract owner
+\item Oracle
+\item pool founder
+\item common user
+\end{itemize}
+These roles are already mentiond in section \S6.1
+\subparagraph{Contract owner privileged functions:}
+We start by presenting the functions that can be triggered only by the contract owner. The role of the owner is to authorize/revoke oracles, set system parameters, authorize pool founding and allow token asset acceptance. Finally, consumed GPT belongs to the owner, so he can only withdraw it. Let's explain the privileged functions. 
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function addNewAsset(bytes8 _symbol, address _contract_addr, uint _collateral_rate)
+\end{lstlisting}
+Allows an asset to be accept by the dApp. The asset must follow the ECRC20 standard and be on ECOCHAIN.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function addNewPool(bytes8 _name, address _leader_addr, uint256 _EFG_amount)
+\end{lstlisting}
+Approves the foundation of a new pool (after the EFG was deposited by the founder).
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function authOracles(address _oracleAddr, bool _action)
+\end{lstlisting}
+Activation/deactivations of oracles.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function setInterestRate(uint256 _interestRate)
+\end{lstlisting}
+Owner can edit the interest rate of EFG. Changing the rate has no impact for existing loans. The interest rate of a loan is constant and is set at the loan creation time (first borrow). Only new loans are affected by a new rate. The user can borrow many times with the same old interest rate.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function setCollateralRate(bytes8 _symbol, uint256 _rate)
+\end{lstlisting}
+Collateral rate is the percentage of the asset value that is considered to compute the borrowing power (maximum loan amount that the user can borrow). It also play its role on liquidation condition. The collateral rate is set at first time that the asset is added. An exception is ECOC asset, which is set at the contract creation time , as it can be seen below:
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function LendingContract (address _EFG_addr, address _GPT_addr) public {
+		..........
+		/* Initial collateral rate of ECOC is 60% , 4 decimal places. */
+		collateralRates["ECOC"] = 6000;
+    }
+\end{lstlisting}
+We must clarify that, similar to setInterestRate() function logic, any changes affect \emph{only} the new created loans. Old loans follow the collateral rates at their cration time until the end of their liftime (full repayment or liquidation). The reason is fairness for the users, because the rates are actually a crusial part of the initial greement between the contract and its users.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function withdrawGPT(address _beneficiar, uint256 _amount)
+\end{lstlisting}
+By this function the owner can withdraw the GPT that was used to trigger the grace period of loans. Any excess GPT that was deposited and never used by the users belongs to them. Users can withdraw the unused GPT by using another function, withdrawAsset().
+
+\subparagraph{Oracles privileged functions}
+Oracles have only one privileged function because their only role is to inject the current rates between the assets to USDT, consuming third party APIs.
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function setUSDTRate(bytes8 _symbol, uint256 _rate)
+\end{lstlisting}
+The function is simple, it sets the current exchange rate between the asset and USDT. 
+
+\subparagraph{Pool founders privileged functions}
+Pool founders are the entities that deposit capital(in EFG). They provide liquidity for the users and their profit derives from interest on EFG or at asset liquidation. They have the privilege to liquidate a loan under some conditions, which we are going to explain.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function marginCall(address _debtors_addr) external returns(bool result)
+\end{lstlisting}
+This is the liquidation function. It can be successfully triggered only by the pool founder where the loan belongs or by contract owner, as it can be seen in the code:
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+require((msg.sender == l.poolAddr) || (msg.sender == owner));
+\end{lstlisting}
+Additionally, \emph{all} of the following criteria must be met for the transaction to succeed:
+\begin{itemize}
+\item there is no grace period in effect:
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+if(block.timestamp < l.lastGracePeriod) {
+	    return false;
+	}
+\end{lstlisting}
+\item the total collateral value has fallen short:
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+if (totalDebt > computeCollateralValue(_debtors_addr) ) {
+	    return true;
+	}
+	return false;
+\end{lstlisting}
+
+Collateral can fall short because of the accumilated interest or because the exchange rates where moved against the expectation of the debtor. Users must not borrow amount near to their borrow limit. Also, if they are near limit it is wise to fully repay the loan or use GPT to extend the grace period.
+\end{itemize}
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function increaseCapital (uint256 _EFG_amount) external returns(bool result)
+\end{lstlisting}
+
+This function can be used by the pool founder to increase the EFG capital inside the pool. If pool attracts many users then the EFG may not be enough for new members. Pool founder can increase the EFG in the pool if he so wishes. He must first approve EFG transfer from his account to the lending smart contract and then trigger the increaseCapital() function with the amount he wishs as an input. For the transaction to be successful, the approved EFG and balance of his account must not be less than the \_EFG\_amount which wants to deposit in the pool.
+
+\subparagraph{Rest of write functions}
+All other function can be called by common users. Let's browse them one by one.
+\\
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function depositAsset(bytes8 _symbol, uint256 _amount, address _pool_addr)
+        external poolExists(_pool_addr) returns(bool result)
+\end{lstlisting}
+This function allows any user to deposit any asset(except ECOC). There are two requrements for the transaction to succeed. First, the loan should be in the initial state, meaning that must be unlocked(no borrowing has taken place yet). Second, the transfer of the asset must be carried out succesfully to the smart contract.
+\\
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function depositECOC(address _pool_addr) external
+        payable poolExists(_pool_addr) returns(bool result)
+\end{lstlisting}
+This function is same as depositAsset, but is is only for depositing ECOC. The same reqirements hold. If the user tries to trigger this function without sending any ECOC the transactuon will fail.
+\\
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function borrow(uint256 _amount) public returns(uint256 borrowedEFG)
+\end{lstlisting}
+Borrow function is the function to borrow for first time or continue borrowing as long as all required conditions are met. The conditions for the borrowing function to be successful are:
+\begin{itemize}
+\item The pool must exist:
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+  	 require(!(addressSearch(pool, poolAddr) == -1 ));
+\end{lstlisting}
+\item borrowing power must exceed current total debt:
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+	require(_amount <= computeBorrowingPower(msg.sender));
+\end{lstlisting}
+\item  requested EFG amount for borrowing must not exceed the existing pool balance:
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ Pool storage p = poolsData[poolAddr];
+	    require(_amount <= p.remainingEFG);
+\end{lstlisting}
+\end{itemize}
+On first borrow the loan it initialized. At initialization the following actions take place:
+\begin{itemize}
+\item the loan is locked, make it unable to accept new collateral until repayd back (or been liqudated)
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ if (firstBorrow) {
+	    l.locked = true;
+\end{lstlisting}
+\item interest rate of EFG is saved. This protects the user after a change of the interest rates. As already mentioned, new rates can't affect loans agreed prior the change.
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+  l.interestRate = interestRateEFG;
+\end{lstlisting}
+\item Other neccessary loan data are initialized.
+\end{itemize}
+On a succesful borrow() transaction the EFG will be automatically withdrawn out of the smart contract to the user. User can repeatadly borrow() as long as the above requirements are met.
+\\
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function extendGracePeriod(uint256 _gpt_amount) external returns(bool result)
+\end{lstlisting}
+User can ask for a grace period or extend an already existing grace period. Each period is fixed in duration, which is 7 hours. While on grace period, the loan can't be liquidated under any condition. The cost for each grace period is 5\% as can be seen in the smart contract:
+\\
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+uint256 constant private periodRate = 5; /* portion of debt in GPT to get the 7 hours grace period , 2 decimal places (5%) */
+\end{lstlisting}
+The smart contract automatically counts existing GPT (it may exist as unused from a previous GPT deposit) and the deposited GPT. The amount must be no less than the minimum 5\% of the total current debt, else will fail:
+\\
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ require(totalDebt * periodRate / 1e2 <= (l.remainingGPT + _gpt_amount) *1e4 * GPTRate / 1e6); 
+\end{lstlisting}
+It is worth noting that if there is enough GPT from a previous deposit then this function can succeed even with an input of 0. That means that the user has the flexibility to call this function the first time depositing a big amount of GPT and later trigger the function without depositing again. After the loan ending (full repayment or liquidation) any unused GPT is available for the user to be withdrawn:
+\\
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+	balance[_debtors_addr]["GPT"] += l.remainingGPT;
+\end{lstlisting}
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function repay(uint256 _amount) external returns (bool result)
+\end{lstlisting}
+Similarly to borrow(), a user can repay the loan as often as he wants. In other words he can make a partial or full repay. This give the user much freedom. In fact the loan can be considered an "open loan", where borrowing and repaying can take place by any sequence, depending on the needs or perception of the user. This fact adds to user experience and satisfaction. If the repay is partial, then first the interest is decreased. If the interest becomes 0 then the capital is decreased. As a final notice, on full repay the loan gets reset, meaning that the interest and collateral rates are being reset. The user can change pool. Also, the new loan gets initialized again, so the new rates will apply. Of course after a full repayment the user has no obligation to borrow again. He can just withdraw all the released collateral and remaining GPT.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function withdrawAsset(bytes8 _symbol, uint256 _amount, address _beneficiars_addr) external returns(bool result)
+\end{lstlisting}
+This function is streightforward. It allows the common user to withdraw his collateral assets (except ECOC) after a full repay. The only requierment is the requested amount to not exceed his available balance. As an additional note, this function can also be used by pool founders or owner to withdraw any seized assets. In any occation, the caller of this function can decide to withdraw to any address. This gives him the flexibility to withdraw directly to an exchange for example, if so wishes. This function can also be used by pool founders to withdraw their profits from accumilated interest (EFG).
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+function withdrawECOC(uint256 _amount, address _beneficiars_addr)
+        external payable returns(bool result)
+\end{lstlisting}
+Same as withdrawAsset(), but for ECOC only.
+
+
+\subparagraph{Callable (read) functions}
+All of the following function are callable by anyone. They don't alter the state of the smart contract, so they can be called by anyone for free. While they can't change the dApp state they are very usefull, beucause the UI or the users or developers can directly access the data of the smart contract, display them to the user and also use them to correctly sent to the other functions (transactions). For example, canSeize() result can be used to decide if the marginCall function can be triggered, getPoolInfo() to decide if the user can trigger depositAsset() etc
+  
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+  function getAssetBalance(bytes8 _symbol, address _address)
+        external
+        view
+        returns(uint256 assetBalance)
+\end{lstlisting}
+Returns the available amount for withdraw for asset with \_symbol and for a beneficiar (precision is 8 decimal places).
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+  function getPoolInfo(address _pool_addr)
+        external
+        view
+        returns (
+            bytes32 name,
+            uint256 remainingEFG
+        )
+\end{lstlisting}
+It accepts the pool founder's address as an input and returns the pool name and remaining EFG for the pool.
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getUserPool(address _depositors_addr) external view returns(address)
+\end{lstlisting}
+Returns the pool address for a specific user.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getUSDTRate(bytes8 _symbol) external view returns(uint256 exchangeRate)
+\end{lstlisting}
+Returns the rate between an asset and USDT (precision is 6 decimal places).
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getAllAssets() external view returns(address[] allAcceptedAssets)
+\end{lstlisting}
+Return the contracts addresses of all ECRC20 tokens that are acceptable as a collateral for the dApp.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function listPoolUsers(address _pool_addr) external view poolExists(_pool_addr) returns(address[] members)
+\end{lstlisting}
+Returns an array of user addresses for a specific pool.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getInterestRate() external view returns(uint256 EFGInterestRate)
+\end{lstlisting}
+Returns the interest rate of EFG (4 decimal places).
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getCollateralAmount(address _debtors_addr) external view returns(uint256[] collateralAmount)
+\end{lstlisting}
+Returns an array of amounts of the deposited collateral. It is used combined with getCollateralSymbols().
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getBorrowLimit(address _depositors_addr) external view returns(uint lendable)
+\end{lstlisting}
+Returns the maximum borrowing power (borrowing limit) in EFG. This amount depends only on deposited collateral and the current USDT rates. It does not influenced by the current debt. Precision is 8 decimal places.
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getEstimatedGPT(address _debtors_addr) external view returns(uint256 GPTamount)
+\end{lstlisting}
+Returns the estimated GPT of a user. The return value can't be excact. The reason is that because of the nature of blockchain we don't know exactly when the next block will be formed, consequentally we don't know the exact block timestamp. The difference is negligible in practise. The UI of the dApp automatically adds a very small amount to the returned value to make sure that extendGraceperiod() will be called succesfully. Precision of returned value is 4 decimal places.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getCollateralRate(bytes8 _symbol) public view returns(uint256 collaterlRate)
+\end{lstlisting}
+Returns the collateral rate of an asset (4 decimal places).
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getDebt(address _debtor) public view returns(uint256 totalDebt, address poolAddress)
+\end{lstlisting}
+Returns current total debt of a user in EFG (8 decimal places). The returned amount has considered the borrowed amount plus the interest until the moment of the call.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getAllPools() public view returns (address[] allPools)
+\end{lstlisting}
+Returns an array of addresses of the pool founders.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getCollateralSymbols(address _debtors_addr) external view returns(bytes8[] collateralSymbol)
+\end{lstlisting}
+Returns an array of symbol assets  of the deposited collateral. It is used combined with getCollateralAmount().
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function getLoanInfo(address _debtor_addr)
+        external view
+        returns (
+            uint256 amount,
+            uint256 timestamp,
+            uint256 interestRate,
+            uint256 interest,
+	    uint256 EFGInitialRate,
+	    uint256 lastGracePeriod,
+	    uint256 remainingGPT,
+            address poolAddr
+        )
+\end{lstlisting}
+Returns useful information for a loan of the user.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function listLiquidable(address _pool_addr) external view poolExists(_pool_addr)
+      returns(address[] allLiquidable)
+\end{lstlisting}
+Returns an array of all loans that can be liquidated for a specific pool. This function is used by pool founder to check which loans can be liquidated in his pool.
+
+\begin{lstlisting}[language=Solidity,numbers=none,escapechar=@]
+ function canSeize(address _debtors_addr) public view returns (bool seizable) 
+\end{lstlisting}
+The return value is a boolean. This means that the assets can be seized. This is a public function, meaning that it is used internaly by the contract and externaly by anyone he wants to check if a loan is liquidable at the calling time. It is used by the pool founders or owner before triggering  marginCall(). Can be also used by the user. If the function returns true but the loan isn't liquidated yet then the user can try to prevent liquidation by using extendGracePeriod() function.
+
+\section{Conclusion}
+\paragraph{ }
+This paper will keep updating every time we add a chain or new features. For EFG dApp the goals in mind are:
+\begin{itemize}
+\item to increase the visibility of Ecochain to the world
+\item to bring liquidity on Ecochain
+\item to increase the userbase of Ecochain, boosting its utility(network effect)
+\item to grow the size of ecosystem, making easier for dApps to be created
+\item to give to the users the option to compose a portfolio
+\end{itemize}
+\paragraph{ }
+We hope that we were analytic enough to explain the motivation, goals,architecture and details about functionality for the dApp. If you have any questions don't hesitate to contact us. Email the EFG team at \href{mailto:info@efg.finance}{info@efg.finance}
+
+\clearpage
+\begin{thebibliography}{2}
+\bibitem{r1}
+[BSV] "A Model of Investor Sentiment", Barberis, Shleifer and Vishny, 1998
+
+\bibitem{r2}
+[DHS] "Investor Psychology and Security Market Under and Over reactions",Daniel, Hirshleifer and Subrahmanyam, 1998
+
+\bibitem{r3}
+[HS] “A Unified Theory of Underreaction, Momentum Trading, and Overreaction in Asset Markets”,Hong and Stein , 1999
+
+\bibitem{r10}
+[KT] “Prospect Theory: An Analysis of Decision Under Risk”,Kahneman and Tversky , 1979
+
+\bibitem{r4}
+[objections on EMH] "Irrational Exuberance", Robert Shiller’s , 2000 
+
+\bibitem{r5}
+[MPT] Modern Portfolio Theory: \texttt{\url{https://www.investopedia.com/terms/m/modernportfoliotheory.asp}}
+
+\bibitem{r6}
+[CAPM] Capital Asset Pricing Model: \texttt{\url{https://en.wikipedia.org/wiki/Capital_asset_pricing_model}}
+
+\bibitem{r7}
+[APT] Arbitrage Pricing Theory: \texttt{\url{https://en.wikipedia.org/wiki/Arbitrage_pricing_theory}}
+
+\bibitem{r8}
+[OPT] Option Pricing Theory: \texttt{\url{https://www.investopedia.com/terms/o/optionpricingtheory.asp}}
+
+\bibitem{r9}
+Prospect theory: \texttt{\url{https://en.wikipedia.org/wiki/Prospect_theory}}
+
+\end{thebibliography}
+
+\end{document}
